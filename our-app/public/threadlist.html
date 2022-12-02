@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Harmony Thread List</title>
+        <link rel="stylesheet" href="../src/App.css">
+        <style>
+            .brand{
+                text-align: center;
+                font-size: 50px;
+            }
+            body{
+                background: #192C3E;
+                font-family: sans-serif;
+            }
+            header{
+                background: #8EA7B4;
+            }
+            .container{
+                background: #8EA7B4;
+            }
+            .innerbg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 600px;
+                width: 900px;
+                background-color: #8EA7B4;
+                }
+
+            .button {
+                background-color: #192C3E;
+                border: none;
+                color: white;
+                margin-top: 15px;
+                padding: 15px 40px;
+                text-align: center;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+
+            }
+            .row {
+                background-color: silver;
+            }
+            .threadname {
+                text-align: center;
+                width: 500px;
+                height: 20px;
+            }
+            .threadcontent {
+                text-align: left;
+                width: 500px;
+                height: 100px;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="brand">Discussions</div>
+            <div class="search" align="right">
+                <div>
+                    <input type="text" name="q" placeholder="search">
+                    <button class="search"><i class="fa fa-search"></i></button>
+                </div>
+            </div>
+            <div class="navigate" align="center">
+                <span><a href="threadlist.html">Home</a></span>
+            </div>
+        </header>
+        <div class="container">
+            <div class="posts-table">
+            </div>
+            <div class="main">
+                <ol>
+                </ol>
+            </div>
+            <div align="center"><textarea class="threadname"></textarea></div>
+            <div align="center"><textarea class="threadcontent"></textarea></div>
+            <div align="center"><button class="createThread">Create Thread</button></div>
+            <br>
+            <div class="pagination" align="center">
+                pages: <a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">5</a>
+            </div>
+            <br>
+        </div>
+
+        <script src="./scripts/data.js"></script>
+        <script>
+            console.log(threads);
+            var container = document.querySelector('ol');
+            for (let thread of threads) {
+                var html = `
+                <li class="row">
+                    <a href = "./thread.html?${thread.id}">
+                        <h4 class = "title">
+                            ${thread.title}
+                        </h4>
+                        <div class="bottom">
+                            <p class = "timestamp">
+                                ${new Date(thread.date).toLocaleString()}
+                            </p>
+                            <p class = "author">
+                                ${thread.author}
+                            </p>
+                        </div>
+                    </a>
+                    <button class="editCreatedThread">Edit</button> <button class="deleteCreatedThread">Delete</button>
+                </li>
+                `
+                container.insertAdjacentHTML('beforeend', html);
+            }
+
+            function addThread(thread) {
+                var threadHTML = `
+                    <li class="row">
+                        <a href = "./thread.html?${thread.id}">
+                            <h4 class = "title">
+                                ${thread.title}
+                            </h4>
+                            <div class="bottom">
+                                <p class = "timestamp">
+                                    ${new Date(thread.date).toLocaleString()}
+                                </p>
+                                <p class = "author">
+                                    ${thread.author}
+                                </p>
+                            </div>
+                        </a>
+                        <button class="editCreatedThread">Edit</button> <button class="deleteCreatedThread">Delete</button>
+                    </li>
+                    `
+                container.insertAdjacentHTML('beforeend', threadHTML);
+            }
+
+            var btn = document.querySelector('.createThread');
+            btn.addEventListener('click', function() {
+                newIDValue = threads.length;
+                var threadname = document.querySelector('.threadname');
+                var threadcontent = document.querySelector('.threadcontent');
+                var newthread = {
+                    id: newIDValue,
+                    title: threadname.value,
+                    author: 'Aaron',
+                    date: Date.now(),
+                    content: threadcontent.value,
+                    comments: [
+                        {
+                            author: 'Aaron',
+                            date: Date.now(),
+                            content: threadcontent.value
+                        }
+                    ]
+                }
+                addThread(newthread);
+                threadname.value = '';
+                threadcontent.value = '';
+                threads.push(newthread);
+                localStorage.setItem('threads', JSON.stringify(threads));
+            })
+
+            function editThread() {
+                ;
+            }
+
+            var btn2 = document.querySelector('.editCreatedThread');
+            btn2.addEventListener('click', function() {
+                ;
+            })
+
+            function deleteThread() {
+                ;
+            }
+
+            var btn3 = document.querySelector('.deleteCreatedThread');
+            btn3.addEventListener('click', function() {
+                var li = $(this).closest('li');
+                var threadIndex = li.index();
+                console.log(threadIndex);
+                delete threads[threadIndex-1];
+                localStorage.setItem('threads', JSON.stringify(threads));
+            })
+        </script>
+    </body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sidebar</title>
+    <style>
+        
+        body {
+            background-color: #192C3E;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 15%;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background: #8EA7B4;
+            overflow-x: hidden;
+            padding-top: 20px;
+            font-family: sans-serif;
+        }
+
+        .sidebartext {
+            display: block;
+            padding: 18px 8px 6px 12px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            color: black;
+            }
+
+        .sidebartextrectangle {
+            height: 8%;
+            width: 80%;
+            position: relative;
+            margin-top: 15%;
+            margin-left: 9%;
+            background-color: #D9D9D9;
+        }
+
+        .welcometext {
+            display: block;
+            padding: 0px 8px 6px 14px;
+            text-decoration: none;
+            font-size: 22px;
+            font-weight: bold;
+            text-align: center;
+            color: black;
+        }
+
+        .main {
+            margin-left: 15%;
+            font-size: 28px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar" >
+       
+        <p class="welcometext">
+            Welcome,
+            %STUDENTNAME
+        </p>
+
+        <div class="sidebartextrectangle">
+            <a class="sidebartext">Home</a>
+        </div>
+
+        <div class="sidebartextrectangle">
+            <a href="teachercourses.html" class="sidebartext">Courses</a>
+        </div>
+        
+        <div class="sidebartextrectangle">
+            <a class="sidebartext">Calendar</a>
+        </div>
+
+        <div class="sidebartextrectangle">
+            <a href="gradebookedit.html" class="sidebartext">Gradebook</a>
+        </div>
+
+        <div class="sidebartextrectangle">
+            <a href="threadlist.html" class="sidebartext">Discussions</a>
+        </div>
+
+        <div class="sidebartextrectangle">
+            <a class="sidebartext">TBD</a>
+        </div>
+    </div>
+    <div class="main">
+        
+    </div>
+</body>
+</html>
