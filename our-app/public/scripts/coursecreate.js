@@ -13,7 +13,7 @@
                 submit.addEventListener('click',(event) => {
                 event.preventDefault();
                 writeCourse();
-                window.history.go(-1)
+                window.history.go(-1);
                 window.location.reload();
                 });
             };
