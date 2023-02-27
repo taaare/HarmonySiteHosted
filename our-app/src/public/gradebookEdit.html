@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gradebook</title>
+        <style>
+
+            body{
+                background: #192C3E;
+                font-family: sans-serif;
+            }
+            .innerbg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 80%;
+                width: 80%;
+                background-color: #8EA7B4;
+                border-radius: 4px;
+                overflow-y:auto;
+            }
+            h1{
+                text-align: center;
+            }
+            form{
+                text-align: center;
+            }
+            input{
+                box-sizing: border-box;
+                width: 200px;
+            }
+            .gradeSlide{
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 9%;
+                width: 90%;
+                background-color: #afbcc4;
+                border-radius: 4px;
+                text-align: left;
+                font-size: 24px;
+                font-family: sans-serif;
+            }
+            .grade{
+                text-align: right;
+                margin-top: -2%;
+                margin-right: 1%;
+            
+            }
+            .grade2{
+                margin-top: -2%;
+                margin-right: 5%;
+                float: right;
+                clear: both;
+                width: 50px;        
+                border-radius: 8px;       
+            }
+            .assignment{
+                margin-top: 2%;
+                margin-left: 1%;
+            }
+            h2{
+                margin-left: 15px;
+            }
+            h4{
+                margin-left: 15px;
+            }
+            .total{
+                margin-top: -2%;
+                margin-right: 1%;
+                float: right;
+                clear: both;
+            }
+            #update{
+                margin-top: -5%;
+                margin-right: 5%;
+                float: right;
+                clear: both;
+                border: none;
+                outline: none;
+                background: #2B547E;
+                cursor: pointer;
+                font-size: 16px;
+                text-transform: uppercase;
+                color: black;
+                border-radius: 4px;
+                transition: .3x;
+            }
+            #add{
+                border: none;
+                outline: none;
+                background: #2B547E;
+                cursor: pointer;
+                font-size: 16px;
+                text-transform: uppercase;
+                color: black;
+                border-radius: 4px;
+                transition: .3x;
+            }
+            #assignment2{
+                margin-top: 2%;
+                border-radius: 8px;       
+            }
+            #total2{
+                border-radius: 8px;       
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="innerbg">
+                <h1>Gradebook</h1>
+                <h2>%CLASSNAME%</h2>
+                <h4>%STUDENTNAME%</h4>
+                <button id="update">Submit Grades</button>
+                <br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 1
+                    </div>
+                    <input type="text" class="grade2" placeholder="Grade">
+                    <div class="total">/100</div>
+                </div>
+                <br><br><br><br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 2
+                    </div>
+                    <input type="text" class="grade2" placeholder="Grade">
+                    <div class="total">/100</div>
+                </div>
+                <br><br><br><br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 3
+                    </div>                    
+                    <input type="text" class="grade2" placeholder="Grade">
+                    <div class="total">/100</div>
+                </div>
+                <br><br><br><br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 4
+                    </div>                    
+                    <input type="text" class="grade2" placeholder="Grade">
+                    <div class="total">/100</div>
+                </div>
+                <br><br><br><br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 5
+                    </div>                    
+                    <input type="text" class="grade2" placeholder="Grade">
+                    <div class="total">/100</div>
+                </div>
+                <br><br><br><br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 6
+                    </div>                    
+                    <input type="text" class="grade2" placeholder="Grade">
+                    <div class="total">/100</div>
+                </div>
+                <br><br><br><br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 7
+                    </div>                    
+                    <input type="text" class="grade2" placeholder="Grade">
+                    <div class="total">/100</div>
+                </div>
+                <br><br><br><br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 8
+                    </div>                    
+                    <input type="text" class="grade2" placeholder="Grade">
+                    <div class="total">/100</div>
+                </div>
+                <br><br><br><br><br>
+                <div class="gradeSlide">
+                    <div class="assignment">
+                        Assignment 9
+                    </div>                    
+                    <input type="text" class="grade2" placeholder="Grade">
+                </div>
+                <div class="gradeSlide">                    
+                    <input type="text" id="assignment2" placeholder="Assignment Name">
+                    <input type="text" id="total2" placeholder="Total Points">
+                    <button id="add">Add</button>
+                </div>
+            </div>
+            <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-analytics.js"></script>
+            <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+            <script src="./scripts/firebase.js" type="module"></script>
+            <script>
+                let button = document.getElementById('add');
+
+                button.addEventListener('click', function (){
+                    let name = 'adamTest';
+                    var ref = firebase.database().ref('users');
+                    ref.push(name);
+                });
+
+                var update = document.getElementById("update");
+                update.addEventListener("click", function(){
+                    alert("Grades Submitted");
+                });
+            </script>
+        </div>
+    </body>
+</html>

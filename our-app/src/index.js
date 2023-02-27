@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import './index.css';
 import App from './App.js';
 import { initializeApp } from 'firebase/app';
@@ -9,7 +10,11 @@ import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from 'firebase/firestore';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<React.StrictMode><App /></React.StrictMode>);
+root.render(<React.StrictMode>
+              <BrowserRouter>
+                <App />
+              </BrowserRouter>
+            </React.StrictMode>);
 
 var firebaseConfig = {
   apiKey: "AIzaSyAoJjrsmcfoCkB-Q446yhlvYH_NUm3uNvQ",

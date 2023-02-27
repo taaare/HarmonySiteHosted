@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Course</title>
+        <style>
+
+            body{
+                background: #192C3E;
+                font-family: sans-serif;
+                }
+
+            .innerbg {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                height: 600px;
+                width: 900px;
+                background-color: #8EA7B4;
+                }
+
+            .button {
+                background-color: #192C3E;
+                border: none;
+                color: white;
+                margin-top: 15px;
+                padding: 15px 40px;
+                text-align: center;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+
+            }
+
+            h1{
+                text-align: center;
+            }
+
+            form{
+                text-align: center;
+            }
+
+            .inputheader{
+                display: block;
+                font-size: large;
+                font-weight: bold;
+                color: black;
+                margin-top: 2px;
+            }
+
+            input{
+                box-sizing: border-box;
+                width: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="innerbg">
+                <h1 id="myh1">Create Class</h1>
+                <form class="course-form" action="">
+                    <div class="">
+                        <label for="class_name" class="inputheader">Class Name</label><br>
+                        <input class="class-name" type="text" placeholder="BIO 112">
+                    </div>
+                    <div>
+                        <label for="instructor_name" class="inputheader">Instructor</label><br>
+                        <input class="instructor-name" type="text" placeholder="James H. Long">
+                    </div>
+                    <div>
+                        <label for="scheduled_days" class="inputheader">Scheduled Days</label><br>
+                        <input class="scheduled-days" type="text" placeholder="TTH">
+                    </div>
+                    <div>
+                        <label for="start_date" class="inputheader">Start Date</label><br>
+                        <input class="start-date" type="date">
+                    </div>
+                    <div>
+                        <label for="end_date" class="inputheader">End Date</label><br>
+                        <input class="end-date" type="date">
+                    </div>
+                    <div>
+                        <label for="start_time" class="inputheader">Start Time</label><br>
+                        <input class="start-time" type="time" >
+                    </div>
+
+                    <div>
+                        <label for="end_time" class="inputheader">End Time</label><br>
+                        <input class="end-time" type="time" >
+                    </div>
+
+                    <div>
+                        <button type="submit" class="button submit-form">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-analytics.js"></script>
+        <script src="./scripts/firebase.js" type="module"></script>
+        <script src="./scripts/coursecreate.js"></script>
+
+    </body>
+</html>

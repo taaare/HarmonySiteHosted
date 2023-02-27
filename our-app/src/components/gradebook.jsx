@@ -1,13 +1,14 @@
 import React from 'react';
 import { useState } from 'react';
 import ReactDOM from 'react-dom/client';
+import Sidebar from './sidebar.jsx';
 
 import '../styles/gradebook.css';
 
-/*
 const Gradebook = () => {
   return (
     <>
+        
         <div className="container">
             <div className="innerbg">
                 <h1>Gradebook</h1>
@@ -101,10 +102,11 @@ const Gradebook = () => {
 };
 
 export default Gradebook;
-*/
 
 
-class SimpleExample extends React.Component {
+
+/**
+ * class Gradebook extends React.Component {
     constructor(props) {
         super(props);
         this.state = {count : 0}
@@ -144,6 +146,7 @@ class SimpleExample extends React.Component {
     }
 }
 
-ReactDOM.render(<SimpleExample/>, document.getElementById('app'))
+ReactDOM.render(<Gradebook/>, document.getElementById('app'))
  
-export default SimpleExample;
+export default Gradebook;
+ */

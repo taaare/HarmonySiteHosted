@@ -1,4 +1,5 @@
 import React, {useEffect, useState, Component} from 'react';
+import { Link } from 'react-router-dom';
 import '../styles/teachercourses.css';
 import Sidebar from './sidebar.jsx';
 
@@ -68,7 +69,7 @@ addClassBanner(){
 
             <div className="container">
                 {this.addClassBanner()} {/*Entry point for class banners*/}
-                <a className="createcoursebtn" href="coursecreate.html">Create Course</a> {/*Button will redirect to create course page*/}
+                <Link to="/createcourse" className="createcoursebtn">Create Course</Link> {/*Button will redirect to create course page*/}
             </div>
 
         </div>

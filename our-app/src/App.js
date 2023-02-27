@@ -1,7 +1,11 @@
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './App.css';
 import React from "react";
-import Login from './components/login.jsx'
-import Gradebook from './components/gradebook.jsx'
+import CreateClass from './components/coursecreate.jsx';
+import TeacherCourses from './components/teachercourses.jsx';
+import Gradebook from './components/gradebook.jsx';
+import Sidebar from './components/sidebar.jsx'
+
 
 function App() {
 
@@ -9,9 +13,14 @@ function App() {
 
   return (
     <>
-      <ul>
-        <Login/>
-      </ul>
+
+
+      <Routes>
+      <Route path="/" element={<Sidebar />} />
+      <Route path="/teachercourses" element={<TeacherCourses />} />
+      <Route path="/createcourse" element={<CreateClass />} />
+      <Route path="/gradebook" element={<Gradebook />} />
+      </Routes>
     </>
   );
 }
