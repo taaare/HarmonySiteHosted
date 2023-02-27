@@ -1,5 +1,4 @@
 
-
 var firebaseConfig = {
   apiKey: "AIzaSyAoJjrsmcfoCkB-Q446yhlvYH_NUm3uNvQ",
   authDomain: "harmony-firebase-e0c11.firebaseapp.com",
@@ -19,7 +18,7 @@ window.testWriteFunction = function testWriteFunction() {
   ref.push(name);
 };
 
-window.writeCourse = function writeCourse() {
+function writeCourse() {
   firebase.database().ref('courses').set({
     courseName: courseName.value,
     instructorName: instructorName.value,
@@ -37,3 +36,5 @@ window.readCourse = function readCourse() {
   window.course = dbRef.child("course").get();
   
 }
+
+export { writeCourse };

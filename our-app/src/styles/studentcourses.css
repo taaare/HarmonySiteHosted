@@ -1,0 +1,73 @@
+        
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        .container{
+            background: #192C3E;
+            font-family: sans-serif;
+        }
+        .courseblock{
+            background-color: #8EA7B4;
+            height: 260px;
+            width: 230px;
+            margin: 100px 80px 0 80px;
+            overflow: auto;
+            display: inline-block;
+        }
+        .coursearea{
+            width: 790px;
+            height: auto;
+            margin: auto;
+        }
+
+        h1{
+            margin-top: 20px;
+            font-size: 25px;
+            text-align: center;
+        }
+        .courseline {
+            background-color: black;
+            color: black;
+            width: 10px;
+            height: 5px;
+        }
+        hr{
+            background-color: black;
+            height: 1px;
+            border: none;
+            margin-top: 20px;
+        }
+        
+        .secondaryline {
+            background-color: black;
+            height: 1px;
+            width: 120px;
+            border: none;
+            margin: 15px auto 15px auto;
+        }
+        .courseinfo {
+            margin-top: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 10px;
+        }
+        .joincoursebtn{
+            display: block;
+            background-color: #8EA7B4;
+            height: 50px;
+            width: 200px;
+            font-weight: bolder;
+            font-size: 20px;
+            margin: 30px auto auto auto;
+            text-decoration: none;
+            color: black;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        a{
+            color: black;
+        }

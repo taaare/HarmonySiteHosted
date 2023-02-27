@@ -4,85 +4,36 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Login Form</title>
-        <style>
-            *{
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            body{
-                min-height: 100vh;
-                background: #192C3E;
-                display: flex;
-                font-family: sans-serif;
-            }
-            .container{
-                margin: auto;
-                width: 500px;
-                max-width: 90%;
-            }
-            .container form{
-                width: 100%;
-                height: 100%;
-                padding: 20px;
-                background: #8EA7B4;
-                border-radius: 4px;
-                box-shadow: 0 8px 16px rgba(0,0,0,.3);
-            }
-            .container form h1{
-                text-align: center;
-                margin-bottom: 24px;
-                color: #222;
-            }
-            .container form .form-control{
-                width: 100%;
-                height: 40px;
-                background: white;
-                border-radius: 4px;
-                border: 1px solid silver;
-                margin: 10px 0 18px 0;
-                padding: 0 10px;
-            }
-            .container form .button{
-                margin-left: 50%;
-                transform: translateX(-50%);
-                width: 120px;
-                height: 34px;
-                border: none;
-                outline: none;
-                background: #2B547E;
-                cursor: pointer;
-                font-size: 16px;
-                text-transform: uppercase;
-                color: black;
-                border-radius: 4px;
-                transition: .3x;
-            }
-            .link {
-            text-align: center;
-            color: white;
-            font-size: 15px;
-            margin-top: 5px;
-            }
-        </style>
+        <link rel="stylesheet" type="text/css" href="../src/login.css">
     </head>
     <body>
-        <div class = "container">
-            <form action = "">
-                <h1>Sign In</h1>
-                <div class = "form-group">
-                    <label for = "">E-Mail: </label>
-                    <input type = "text" class = "form-control" required>
+        <div id="content_container">
+            <div id="form_container">
+                <div id="form_header_container">
+                    <h2 id="form_header"> Login </h2>
                 </div>
-                <div class = "form-group">
-                    <label for = "">Password: </label>
-                    <input type = "password" class = "form-control" required>
-                 </div>
-                 <input formaction="sidebar.html" type = "submit" class = "button" value = "Login">
-                 <p class="link">
-                    Not have an account? <a href="signup.html">Sign Up Here</a>
-                  </p>
-            </form>
-        </div>                                                                                                                                                                                                                                                                                                                                                                                                         
+
+                <div id="form_content_container">
+                    <div id="form_content_inner_container">
+                        <input type="text" id="full_name" placeholder="Full name">
+                        <input type="email" id="email" placeholder="Email">
+                        <input type="password" id="password" placeholder="New Password">
+
+                        <div id="button_container">
+                            <button onclick="login()">Login</button>
+                            <button onclick="register()">Register</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </body>
+    
+    <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-auth.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.3.3/firebase-database.js"></script>
+
+    <script src="login.js"></script>                                                                                                                                                                                                                                                                                                                                                                                                      
+
 </html>

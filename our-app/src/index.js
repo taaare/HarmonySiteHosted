@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App.js';
 import { initializeApp } from 'firebase/app';
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref, set } from "firebase/database";
 import { getAnalytics } from 'firebase/analytics';
 import { getFirestore } from 'firebase/firestore';
 
@@ -21,8 +23,11 @@ var firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const analytics = getAnalytics(app);
 const db = getFirestore(app);
+const database = getDatabase(app);
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

@@ -1,5 +1,7 @@
 import './App.css';
 import React from "react";
+import Login from './components/login.jsx'
+import Gradebook from './components/gradebook.jsx'
 
 function App() {
 
@@ -8,9 +10,8 @@ function App() {
   return (
     <>
       <ul>
-        <a href='login.html'><h1>Begin App</h1></a>
+        <Login/>
       </ul>
-    
     </>
   );
 }

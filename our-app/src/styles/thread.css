@@ -1,0 +1,49 @@
+.brand{
+    text-align: center;
+    font-size: 50px;
+}
+.container{
+    background: #192C3E;
+    font-family: sans-serif;
+}
+header{
+    background: #8EA7B4;
+}
+.main{
+    background: #8EA7B4;
+}
+.innerbg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 600px;
+    width: 900px;
+    background-color: #8EA7B4;
+}
+.header{
+    text-align: center;
+}
+h4{
+    font-size: 35px;
+}
+.button {
+    background-color: #192C3E;
+    border: none;
+    color: white;
+    margin-top: 15px;
+    padding: 15px 40px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.comment {
+    background-color: silver;
+    text-align: center;
+}
+textarea {
+    text-align: left;
+    width: 250px;
+    height: 100px;
+}
