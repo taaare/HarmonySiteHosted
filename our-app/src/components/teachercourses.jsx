@@ -1,30 +1,64 @@
-import React, {useEffect, useState, Component} from 'react';
+import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import '../styles/teachercourses.css';
-import Sidebar from './sidebar.jsx';
+import styles from '../styles/teachercourses.module.css';
+import ClassBanner from './classbanner.jsx';
+import { getDatabase, ref, onValue, } from "firebase/database";
+import app from '../firebase.js';
 
 class TeacherCourses extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        courses: [
-            {
-                "id" : 0 ,
-                "name" : "ELE 210",
-                "instructor" : "John E. Poggers",
-            },
-            {
-                "id" : 1 ,
-                "name" : "PGG 777",
-                "instructor" : "Tomathy Jones",
-            }
-        ],
+        courses: [],
 
-        courseCount: 2,
+        courseCount: 0,
 
+        user: null,
+
+        userEmail: '0',
     };
     
     this.handleAddingComponent = this.handleAddingComponent.bind(this) //change
+
+  }
+
+  componentDidMount(){
+    const database = getDatabase(app);
+
+    const userCourses = [];
+
+    this.setState({
+      userEmail: this.props.userEmail,
+      user: this.props.user,
+    }, () => {    
+      
+
+      if(this.state.user.courses && this.state.user.courses.length > 0){
+        for(var i = 0; i < this.state.user.courses.length; i++){
+
+          const courseRef = ref(database, 'courses/' + this.state.user.courses[i]);
+  
+          onValue(courseRef, (snapshot) => { // individual course
+            const course = snapshot.val();
+            if(course !== null){
+              userCourses.push(course);
+            }
+  
+          }, (error) => {
+            console.error(error);
+          });
+        } // ending of for loop that loops through all courses in user and set's state after to help display courses for user
+  
+  
+      this.setState({
+        courses: userCourses,
+        courseCount: userCourses.length
+      });
+      }
+  
+  }
+  
+  );
 
   }
 
@@ -33,27 +67,18 @@ class TeacherCourses extends Component {
 }
 
 addClassBanner(){
-    let count = this.state.courseCount, classBanners = [];
+    let classBanners = [];
     
     for(var i = 0; i < this.state.courseCount; i++){
         classBanners.push(
-            <a href={""}> {/*Will be link to individual course page once setup*/}
-            <div className="courseblock"> {/*Will insert blocks in position based on number of courses*/}
-                <h1>{this.state.courses[i].name}</h1>
-                <hr />
-                <div className="courseinfo"> {/*Course info will be inserted accordingly, currently filler info*/}
-                <h2>Instructor</h2>
-                <hr className="secondaryline" />
-                <h2>{this.state.courses[i].instructor}</h2>
-                </div>
-                <div className="courseinfo">
-                <h2>Meeting Times</h2>
-                <hr className="secondaryline" />
-                <h2>{this.state.courses[i].id}</h2>
-                </div>
-            </div>
-        </a>
-            )
+            
+           <ClassBanner key={this.state.courses[i].courseCode}
+                        courseName={this.state.courses[i].courseName} 
+                        instructorName={this.state.courses[i].instructorName} 
+                        courseCode={this.state.courses[i].courseCode}
+                        course={this.state.courses[i]} />
+
+         ) // coursecode becomes one of these so that we can use props to display right course page (using keys)
     }
 
     return classBanners;
@@ -64,12 +89,17 @@ addClassBanner(){
   render() {
     return (
         <>
-        <Sidebar/>
-        <div className="coursearea">
+        <div className={styles.coursearea}>
 
-            <div className="container">
+            <div className={styles.container}>
+
                 {this.addClassBanner()} {/*Entry point for class banners*/}
-                <Link to="/createcourse" className="createcoursebtn">Create Course</Link> {/*Button will redirect to create course page*/}
+              
+              {
+              (this.state.user && this.state.user.isTeacher) ? (
+                <Link to="/createcourse" className={styles.createcoursebtn}>Create Course</Link>
+              ) : ( <Link to="/joincourse" className={styles.createcoursebtn}>Join Course</Link>)
+              }
             </div>
 
         </div>

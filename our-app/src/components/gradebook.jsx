@@ -1,152 +1,103 @@
-import React from 'react';
-import { useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import Sidebar from './sidebar.jsx';
-
+import React, { useEffect, useState } from 'react';
 import '../styles/gradebook.css';
+import Sidebar from './sidebar.jsx';
+import { useForm } from 'react-hook-form';
+import app from '../firebase.js';
+import { v4 as uuidv4 } from 'uuid';
+import { getDatabase, ref, set, get, onValue, push } from 'firebase/database';
 
-const Gradebook = () => {
+const Gradebook = (props) => {
+
+  const [grades, setGrades] = useState([]);
+  const [assignments, setAssignments] = useState([]);
+  const [courses, setCourses] = useState([]);
+  const [selectedCourse, setSelectedCourse] = useState('');
+
+  const database = getDatabase(app);
+  
+
+  // Fetch courses
+  //todo - fetch only courses that the user is enrolled in
+  useEffect(() => {
+    const coursesRef = ref(database, 'courses');
+    onValue(coursesRef, (snapshot) => {
+      const data = snapshot.val();
+      const courseList = Object.entries(data).map(([id, courseData]) => ({
+        id,
+        ...courseData,
+      }));
+      setCourses(courseList);
+    });
+  }, []);
+
+
+  useEffect(() => {
+    const coursesRef = ref(database, 'courses');
+    onValue(coursesRef, (snapshot) => {
+      const data = snapshot.val();
+      const courseList = Object.entries(data).map(([id, courseData]) => ({
+        id,
+        ...courseData,
+      }));
+      setCourses(courseList);
+    });
+  }, []);
+
+  // Fetch assignments for a specific course
+  const fetchAssignmentsForCourse = async (courseId) => {
+    const assignmentRef = ref(database, `courses/${courseId}/assignments`);
+    const snapshot = await get(assignmentRef);
+
+    if (snapshot.exists()) {
+      const data = snapshot.val();
+      const assignmentsList = Object.entries(data).map(([userId, assignmentData]) => ({
+        userId,
+        ...assignmentData,
+      }));
+      return assignmentsList;
+    } else {
+      console.log('No assignments data available');
+      return [];
+    }
+  };
+
+  useEffect(() => {
+    if (selectedCourse) {
+      fetchAssignmentsForCourse(selectedCourse).then((assignmentsList) => setAssignments(assignmentsList));
+    } else {
+        setAssignments([]);
+    }
+  }, [selectedCourse]);
+
+  const handleCourseChange = (e) => {
+    setSelectedCourse(e.target.value);
+  };
+
   return (
     <>
-        
-        <div className="container">
-            <div className="innerbg">
-                <h1>Gradebook</h1>
-                <h2>%CLASSNAME%</h2>
-                <h4>%STUDENTNAME%</h4>
-                <br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 1
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
-                <br /><br /><br /><br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 2
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
-                <br /><br /><br /><br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 3
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
-                <br /><br /><br /><br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 4
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
-                <br /><br /><br /><br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 5
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
-                <br /><br /><br /><br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 6
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
-                <br /><br /><br /><br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 7
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
-                <br /><br /><br /><br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 8
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
-                <br /><br /><br /><br /><br />
-                <div className="gradeSlide">
-                <div className="assignment">
-                    Assignment 9
-                </div>
-                <div className="grade">
-                    100%
-                </div>
-                </div>
+      <div className="container">
+        <div className="innerbg">
+          <h1>Gradebook</h1>
+          <select value={selectedCourse} onChange={handleCourseChange}>
+            <option value=""></option>
+            {courses.map((course) => (
+              <option key={course.id} value={course.id}>
+                {course.courseName}
+              </option>
+            ))}
+          </select>
+          <br/><br/><br/>
+          {assignments.map((assignment, index) => (
+            <div key={index} className="gradeSlide">
+              <div className="assignment">{assignment.assignmentName}</div>
+              <div className="grade">{assignment.grades[props.user.uid]} / {assignment.maxPoints}</div>
+              <br/><br/><br/><br/><br/>
             </div>
+          ))}
         </div>
+      </div>
     </>
   );
 };
 
 export default Gradebook;
-
-
-
-/**
- * class Gradebook extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {count : 0}
-        this.handleAddingDivs = this.handleAddingDivs.bind(this)
-    }
-
-    handleAddingDivs() {
-        this.setState({count: this.state.count + 1})     
-    }
-    
-    renderDivs(){
-        let count = this.state.count, uiItems = [];
-        while(count--)
-           uiItems.push(
-               <div>
-                   This is added div! uniqueID: {count}
-               </div> 
-            )
-        return uiItems;
-    }
-
-    render() {
-        return (
-            
-            <div>
-                <div className="container">
-                <div className="innerbg">
-                    <h1>Gradebook</h1>
-                    <h2>%CLASSNAME%</h2>
-                    <h4>%STUDENTNAME%</h4>
-                    <br /><br />
-                </div>
-                </div>
-                {this.renderDivs()}
-            </div>
-        )
-    }
-}
-
-ReactDOM.render(<Gradebook/>, document.getElementById('app'))
- 
-export default Gradebook;
- */

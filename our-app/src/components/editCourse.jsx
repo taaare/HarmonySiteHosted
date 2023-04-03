@@ -5,10 +5,10 @@ import { useForm } from 'react-hook-form';
 import { getDatabase } from "firebase/database";
 import { ref, set, update } from 'firebase/database';
 import app from '../firebase.js';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useLocation} from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-const CreateClass = (props, {updateUser}) => {
+const EditClass = (props, {updateUser}) => {
 
     
 
@@ -16,11 +16,15 @@ const CreateClass = (props, {updateUser}) => {
 
     const navigate = useNavigate();
 
+    const location = useLocation();
+
+    const course = location.state && location.state.course;
+
     // Might use a subset of the uuid as course code to join courses
     const onSubmit = (data) => {
         
         
-        let courseCode = Math.random().toString(36).substr(2, 6).toUpperCase();
+        let courseCode = course.courseCode;
 
         const database = getDatabase(app);
 
@@ -28,29 +32,10 @@ const CreateClass = (props, {updateUser}) => {
 
         set(ref(database, 'courses/' + courseCode), data);
 
-        saveToUser(courseCode);
-
         navigate('/teachercourses');
 
-        alert("Course Successfully Created");
+        alert("Course Successfully Edited");
        
-        // firebase.database().ref('courses/' + courseCode).set(data); old implementation
-      };
-
-      const saveToUser = (courseCode)=> {
-        const database = getDatabase(app);
-        const userRef = ref(database, 'users/' + props.user.uid);
-
-        const tempCourses = props.user.courses;
-
-        tempCourses.push(courseCode);
-
-        update(userRef, {
-            courses: tempCourses,
-          }).catch((error) => {
-            console.error(error);
-          });
-
       };
 
     return (
@@ -58,7 +43,7 @@ const CreateClass = (props, {updateUser}) => {
         <div className="tempBody">
             <div className="container">
                 <div className="innerbg">
-                    <h1 id="myh1">Create Class</h1>
+                    <h1 id="myh1">Edit Class</h1>
                     
                     <form className="course-form" onSubmit={handleSubmit(onSubmit)}>
                         <div className="">
@@ -100,4 +85,4 @@ const CreateClass = (props, {updateUser}) => {
   );
 };
 
-export default CreateClass;
+export default EditClass;

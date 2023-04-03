@@ -8,7 +8,7 @@
     left: 50%;
     transform: translate(-50%, -50%);
     height: 80%;
-    width: 80%;
+    width: 65%;
     background-color: #8EA7B4;
     border-radius: 4px;
     overflow-y:auto;
@@ -25,9 +25,7 @@ input{
     width: 200px;
 }
 .gradeSlide{
-    position: absolute;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin-left: 4%;
     height: 9%;
     width: 90%;
     background-color: #afbcc4;
