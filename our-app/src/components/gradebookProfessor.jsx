@@ -84,7 +84,7 @@ const GradeEditor = (props) => {
             type="text"
             className="grade2"
             defaultValue={assignment.grade || ''}
-            placeholder={assignment.grades[props.user.id] || ''}
+            placeholder={assignment?.grades?.[props.user.uid] ?? ''}
           />
           / {assignment.maxPoints}
         </div>

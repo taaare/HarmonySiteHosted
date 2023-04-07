@@ -90,7 +90,7 @@ const Gradebook = (props) => {
           {assignments.map((assignment, index) => (
             <div key={index} className="gradeSlide">
               <div className="assignment">{assignment.assignmentName}</div>
-              <div className="grade">{assignment.grades[props.user.uid]} / {assignment.maxPoints}</div>
+              <div className="grade">{assignment?.grades?.[props.user.uid] ?? ''} / {assignment.maxPoints}</div>
               <br/><br/><br/><br/><br/>
             </div>
           ))}
