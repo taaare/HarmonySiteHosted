@@ -78,8 +78,8 @@ const Gradebook = (props) => {
       <div className="container">
         <div className="innerbg">
           <h1>Gradebook</h1>
-          <select value={selectedCourse} onChange={handleCourseChange}>
-            <option value=""></option>
+          <select id="gradeDropdown" value={selectedCourse} onChange={handleCourseChange}>
+            <option value="">Select a class to view</option>
             {courses.map((course) => (
               <option key={course.id} value={course.id}>
                 {course.courseName}

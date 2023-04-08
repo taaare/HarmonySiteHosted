@@ -95,19 +95,19 @@ const GradeEditor = (props) => {
   return (
     <div className="container">
       <div className="innerbg">
-        <h1>Gradebook</h1>
+        <h1>Gradebook Professor Editor</h1>
         <Link to="/create">
-          <button id="add">Add</button>
+          <button id="add">Add Assignment</button>
         </Link>
-        <select value={selectedClass} onChange={handleClassChange}>
-          <option value="">Select a class</option>
+        <select id="classSelect" value={selectedClass} onChange={handleClassChange}>
+          <option  value="">Select a class</option>
           {classes.map((c, index) => (
             <option key={index} value={c.courseCode}>
               {c.courseName}
             </option>
           ))}
         </select>
-        <select value={selectedUser} onChange={handleUserChange}>
+        <select id="userSelect"value={selectedUser} onChange={handleUserChange}>
           <option value="">Select a user</option>
           {users.map((u, index) => (
             <option key={index} value={u.uid}>

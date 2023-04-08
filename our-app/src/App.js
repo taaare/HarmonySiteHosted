@@ -14,7 +14,6 @@ import CreateGrade from './components/gradebookCreate.jsx'
 import Discussions from './components/Discussions.jsx';
 import DiscussionsList from './components/DiscussionsList.jsx';
 import Discussion from './components/Discussion.jsx';
-import DiscussionList from './components/DiscussionList.jsx';
 import Gradebook from './components/gradebook.jsx';
 import GradeEditor from './components/gradebookProfessor.jsx';
 import CoursePage from './components/coursepage.jsx';
@@ -59,14 +58,11 @@ function App() {
           />
       <Route path="/teachercourses" element={user !== '0' ? <TeacherCourses userEmail={userEmail} user={user} /> : <Navigate to='/account' />} />
       <Route path="/createcourse" element={userEmail !== '0' ? <CreateClass user={user} /> : <Navigate to='/' />} />
-      <Route path="/gradebook" element={userEmail !== '0' ? <Gradebook userEmail={userEmail} user={user} /> : <Navigate to='/' />} />
-      <Route path="/create" element={userEmail !== '0' ? <CreateGrade /> : <Navigate to="/" />} />
-      <Route path="/gradebook" element={userEmail !== '0' ? <Gradebook userEmail={userEmail} user={user} /> : <Navigate to='/' />} />
-      <Route path="/create" element={userEmail !== '0' ? <CreateGrade /> : <Navigate to="/" />}/>
+      <Route path="/creategrade" element={userEmail !== '0' ? <CreateGrade /> : <Navigate to="/" />} />
+      <Route path="/gradebook" element={userEmail !== '0' ? (user.isTeacher ? <GradeEditor userEmail={userEmail} user={user} /> : <Gradebook userEmail={userEmail} user={user} />) : <Navigate to='/' />} />
       <Route path="/createcourse" element={userEmail !== '0' ? <CreateClass user={user} updateUser={updateUser} /> : <Navigate to='/' />} />
       <Route path="/joincourse" element={userEmail !== '0' ? <JoinClass user={user} updateUser={updateUser} /> : <Navigate to='/' />} />
       <Route path="/editcourse" element={userEmail !== '0' ? <EditClass user={user} updateUser={updateUser} /> : <Navigate to='/' />} />
-      <Route path="/gradebook" element={userEmail !== '0' ? <Gradebook /> : <Navigate to='/' />} />
       <Route path="/sidebar" element={userEmail !== '0' ? <Sidebar /> : <Navigate to='/' />}/>
       <Route path="/discussions" element={userEmail !== '0' ? <Discussions/> : <Navigate to='/' />} />
       <Route path="/coursepage/:courseCode" element={userEmail !== '0' ? <CoursePage user={user} /> : <Navigate to='/' />} />

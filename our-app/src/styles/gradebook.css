@@ -3,6 +3,7 @@
     font-family: sans-serif;
 }
 .innerbg {
+
     position: absolute;
     top: 50%;
     left: 50%;
@@ -48,4 +49,58 @@ h2{
 }
 h4{
     margin-left: 15px;
+}
+#add { 
+    background-color: #00508a;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+    padding: 8px 0.8em;
+    margin-left: 1%;
+}
+#update {
+    background-color: #00508a;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    box-shadow: rgba(255, 255, 255, .4) 0 1px 0 0 inset;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system,system-ui,"Segoe UI","Liberation Sans",sans-serif;
+    padding: 8px 0.8em;
+    margin-left: 1%;
+}
+#userSelect{
+    color: #000000;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+    user-select: none;
+    margin-left: 2%;
+}
+#classSelect {
+    color: #000000;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+    user-select: none;
+    margin-left: 2%;
+}
+#gradeDropdown{
+    color: #000000;
+    background-color: #48718f;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-color: transparent transparent rgba(0, 0, 0, 0.1) transparent;
+    cursor: pointer;
+    user-select: none;
+    margin-left: 2%;
 }
