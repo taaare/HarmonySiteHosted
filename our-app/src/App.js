@@ -37,6 +37,13 @@ function App() {
     localStorage.setItem('user', JSON.stringify(user));
   };
 
+  const [userIsTeacher, setUserIsTeacher] = useState(localStorage.getItem('userIsTeacher') === 'true');
+
+  const updateUserIsTeacher = (isTeacher) => {
+    setUserIsTeacher(isTeacher);
+    localStorage.setItem('userIsTeacher', isTeacher);
+  };
+
 
   return (
     <div>
@@ -47,15 +54,17 @@ function App() {
       
        <Routes>
         <Route path = '/' element = {<Signin updateUserEmail={updateUserEmail}/>} />
-        <Route path = '/signup' element = {<Signup />} />
+        <Route path="/signup" element={<Signup updateUserIsTeacher={updateUserIsTeacher} />} />
         <Route
-            path='/account'
-            element={
-              <ProtectedRoute>
-                {(userEmail !== '0' && <Account updateUserEmail={updateUserEmail} updateUser={updateUser} />) || <Navigate to='/' /> }
-              </ProtectedRoute>
-            }
-          />
+          path="/account"
+          element={
+            <ProtectedRoute>
+              {(userEmail !== '0' && (
+                <Account updateUserEmail={updateUserEmail} updateUser={updateUser} isTeacher={userIsTeacher} />
+              )) || <Navigate to="/" />}
+            </ProtectedRoute>
+          }
+        />
       <Route path="/teachercourses" element={user !== '0' ? <TeacherCourses userEmail={userEmail} user={user} /> : <Navigate to='/account' />} />
       <Route path="/createcourse" element={userEmail !== '0' ? <CreateClass user={user} /> : <Navigate to='/' />} />
       <Route path="/creategrade" element={userEmail !== '0' ? <CreateGrade /> : <Navigate to="/" />} />

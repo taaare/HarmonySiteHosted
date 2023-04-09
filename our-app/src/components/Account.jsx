@@ -4,7 +4,7 @@ import { UserAuth } from '../context/AuthContext.js';
 import app from '../firebase.js';
 import { getDatabase, set, ref, get} from "firebase/database";
 
-const Account = ({ updateUserEmail, updateUser }) => {
+const Account = ({ updateUserEmail, updateUser, isTeacher }) => {
   const { user, logout } = UserAuth();
 
   const navigate = useNavigate();
@@ -12,7 +12,6 @@ const Account = ({ updateUserEmail, updateUser }) => {
   const handleLogout = async () => {
     try {
       await logout();
-      alert('You have been logged out');
       navigate('/');
     } catch (e) {
       console.log(e.message);
@@ -32,8 +31,10 @@ const Account = ({ updateUserEmail, updateUser }) => {
 
     const userInfo = {
       email: user.email,
-      courses: ["7X7A3F", "64L9EL"],
+      courses: [],
+      isTeacher: isTeacher,
     };
+
 
     get(userRef).then((snapshot) => {
 

@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { UserAuth } from '../context/AuthContext.js';
 
-const Signup = () => {
+const Signup = ({updateUserIsTeacher}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -11,14 +11,14 @@ const Signup = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const isTeacher = e.target.isTeacher.checked;
         setError('');
         try {
             await createUser(email, password);
-            alert('Account created, please sign in.')
+            updateUserIsTeacher(isTeacher);
             navigate('/'); 
         } catch (e) {
-            setError(e.message);
-            console.log(e.message);
+            setError('Email is already in use.');
         }
     };
 
@@ -38,6 +38,11 @@ const Signup = () => {
             <div className='flex flex-col py-2'>
                 <label className= 'py-2 font-medium'>Password</label>
                 <input onChange={(e) => setPassword(e.target.value)} className= 'w-full border p-3' type ="password" />
+            </div>
+            <input type="checkbox" id="isTeacher" name="isTeacher" />
+            <label htmlFor="isTeacher">I am a teacher</label>
+            <div>
+                {error && <div className="e"> {error}</div>}
             </div>
             <button className = 'border border-purple-500 bg-purple-600 hover:bg-purple-500 w-full p-4 my-2 text-white'>Sign Up</button>
         </form>
