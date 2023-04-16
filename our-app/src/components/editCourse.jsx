@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { getDatabase } from "firebase/database";
 import { ref, set, update } from 'firebase/database';
 import app from '../firebase.js';
-import {useNavigate, useLocation} from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 const EditClass = (props, {updateUser}) => {

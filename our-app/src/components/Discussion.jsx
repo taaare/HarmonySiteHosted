@@ -1,10 +1,3 @@
-/*
-NOTE:
-This is the page for an individual discussion.
-You will be able to edit and delete comments from here,
-but you can't edit the title or delete the thread itself from within a discussion.
-*/
-
 import {useEffect, useState} from "react";
 import ReactDOM from 'react-dom/client';
 import { initializeApp } from "firebase/app"
@@ -14,7 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import styles from '../styles/discussions.module.css';
 import app from '../firebase.js';
 import DiscussionsList from './DiscussionsList';
-import DiscussionList from './DiscussionList';
+import DiscussionList from "./DiscussionList";
 import Sidebar from "./sidebar";
 
 var firebaseConfig = {
@@ -29,6 +22,8 @@ var firebaseConfig = {
 };
 const db = getDatabase(app);
 const dbRef = ref(db, `discussions`);
+const userRef = ref(db, 'users');
+const courseRef = ref(db, 'courses');
 
 export default function Discussion() {
     const [title, setTitle] = useState('');
@@ -38,59 +33,70 @@ export default function Discussion() {
     const [discussionList, setDiscussionList] = useState();
     const location = useLocation();
     const [discussion, setDiscussion] = useState([]);
-    const discussionid = window.location.href.split("/").pop();
-    const discussionRef = child(dbRef, `/${discussionid}`);
+    const [commentsList, setCommentsList] = useState([]);
+    const [commentTitle, setCommentTitle] = useState("");
+    const [commentAuthor, setCommentAuthor] = useState("");
+    const [commentDate, setCommentDate] = useState();
     const [isEdit, setIsEdit] = useState(false);
+    const [updatedComment, setUpdatedComment] = useState('');
+    const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '0');
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || '0');
+    const [userIsTeacher, setUserIsTeacher] = useState(localStorage.getItem('userIsTeacher') === 'true');
+    const [courseTitle, setCourseTitle] = useState("");
 
-    const getDiscussion = () => {
-        get(child(dbRef, `/${discussionid}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                console.log(snapshot.val().title);
-            } else {
-                console.log("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-    };
+    const course = location.state && location.state.course;
 
-    getDiscussion();
+    const idsToUse = window.location.href.split("/");
+    const courseid = idsToUse[idsToUse.indexOf("discussions")+1];
+    const discussionid = idsToUse[idsToUse.indexOf("discussion")+1];
 
-    const getComment = (index) => {
-        get(child(dbRef, `/${discussionid}/comments/${index}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                console.log("Snapshot val for comments[" + index + "]: " + snapshot.val());
-            } else {
-                console.log("No comment available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
-    };
-
-    getComment(0);
+    const newDiscussionsRef = ref(db, `courses/${courseid}/discussions`);
 
     const handleOnChange = (e) => {
-        setComment(e.target.value);
+        setCommentTitle(e.target.value);
     };
 
     //create
     const createComment = () => {
         const uuid = uuidv4();
+        let index = commentsList.length+1;
 
-        comments.push(comment);
-
-        set(ref(db, `discussions/${discussionid}`), {
-            title: discussion.title,
-            comments: comments,
-            uuid
+        onValue(child(newDiscussionsRef, `/${discussionid}/comments`),(snapshot)=>{
+            try {
+                const comments = snapshot.val();
+                for (let id in comments) {
+                    if (Number(id) === index) {
+                        index = index + 1;
+                    }
+                }
+            } catch (e) {
+                console.log(e);
+            }
         });
-        //will have discussions + courseCode, can get that via importing it each time, or passing it down from the course page
+
+        let today = new Date().toISOString().slice(0,10);
+
+        set(ref(db, `courses/${courseid}/discussions/${discussionid}/comments/${index}`), {
+            title: commentTitle,
+            author: userEmail,
+            date: today,
+        });
+    };
+
+    const snapshotToArray = snapshot => {
+        var returnArr = [];
+
+        snapshot.forEach(function(childSnapshot) {
+            var item = childSnapshot.val();
+            returnArr.push(item);
+        });
+
+        return returnArr;
     };
 
     //read
     useEffect(() => {
-        onValue(child(dbRef, `/${discussionid}`),(snapshot)=>{
+        onValue(child(newDiscussionsRef, `/${discussionid}`),(snapshot)=>{
             try {
                 const discussion = snapshot.val();
                 setDiscussion(discussion);
@@ -100,65 +106,47 @@ export default function Discussion() {
         });
     }, []);
 
-    const deleteComment = (index) => {
-        const commentsRef = child(dbRef, `/${discussionid}/comments/${index}`);
-        remove(commentsRef);
-    };
-    
-    const handleUpdate = () => {
-        const uuid = uuidv4();
-        setIsEdit(true);
-        setTempUuid(discussion.uuid);
-    };
-
-    const writeToDatabase = () => {
-        const uuid = uuidv4();
-        const commentsRef = ref(db, `discussions/${discussion.id}`);
-        set(ref(db, `discussions/${discussionid}`), {
-            title: discussion.title,
-            comments: comments,
-            uuid
+    useEffect(() => {
+        onValue(child(newDiscussionsRef, `/${discussionid}/comments`),(snapshot)=>{
+            try {
+                const comments2 = snapshot.val();
+                const commentsList = [];
+                for (let id in comments2) {
+                    commentsList.push({id, ...comments2[id]});
+                }
+                setCommentsList(commentsList);
+            } catch (e) {
+                console.log(e);
+            }
         });
-        setIsEdit(false);
-    };
+    }, []);
+
+    useEffect(() => {
+        onValue(ref(db, `courses/${courseid}/courseName`),(snapshot)=>{
+            try {
+                const courseTitle = snapshot.val();
+                setCourseTitle(courseTitle);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }, []);
 
     return (
         <>
         <div>
             <header>
-                <div className={styles.brand}>Discussions</div>
-                <div className={styles.search} align="right">
-                    <div>
-                        <input type="text" name="q" placeholder="search"></input>
-                        <button><i className={styles.search}></i></button>
-                    </div>
-                </div>
+                <div className={styles.brand}>{courseTitle} Discussions</div>
                 <div className={styles.navigate} align="center">
-                    <span><Link to={`/discussions`}>Home</Link> <Link to={``}>{discussion.title}</Link></span>
+                    <span><Link to={`/coursepage/${courseid}`}>{courseTitle}</Link> - <Link to={`/discussions/${courseid}`}>Discussions</Link> - <Link to={``}>{discussion.title}</Link></span>
                 </div>
             </header>
             <div>
-                {comments.map((comment, index) => (
-                    <>
-                        <div className={styles.discussionsLink}>{comment}</div>
-                        <div className={styles.inputButton}>
-                            <button onClick={deleteComment(index)}>Delete</button>
-                            {isEdit ? (
-                                <>
-                                    <input type="text" align="center" onChange={handleOnChange} value={comment}/>
-                                    <button onClick={writeToDatabase}>Submit Changes</button>
-                                    <button onClick={() => setIsEdit(false)}>Cancel Changes</button>
-                                </>
-                            ) : (
-                                <button onClick={handleUpdate}>Edit</button>
-                            )}
-                        </div>
-                    </>
-                ))}
+                {commentsList?.map((comment, index) => <DiscussionList comment={comment} key={index}/>)}
             </div>
             <div>
                 <div className={styles.inputText}>
-                    <input type="text" onChange={handleOnChange} value={comment}/>
+                    <input type="text" onChange={handleOnChange} value={commentTitle}/>
                 </div>
                 <div className={styles.inputButton}>
                     <button onClick={createComment}>Add Comment</button>

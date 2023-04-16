@@ -6,11 +6,9 @@ import { useLocation, Link } from 'react-router-dom';
 
 
 const CoursePage = (props) => {
-
         const location = useLocation();
 
         const course = location.state && location.state.course;
-    
 
         return (
             <>
@@ -27,7 +25,7 @@ const CoursePage = (props) => {
                                 ) : <Link to="/account" className={styles.linkText}>Account</Link>
                             }
 
-                            <Link to="/discussions" className={styles.linkText}>Discussions</Link>
+                            <Link to={`/discussions/${course.courseCode}`} className={styles.linkText}>Discussions</Link>
 
 
                             </div>

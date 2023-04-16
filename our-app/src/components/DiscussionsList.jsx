@@ -1,13 +1,8 @@
-/*
-NOTE:
-This is the code for how an individual thread link (with edit and delete) is rendered in the list of threads.
-*/
-
 import {useEffect, useState} from "react";
 import ReactDOM from 'react-dom/client';
 import { Link, useLocation, BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import { initializeApp } from "firebase/app"
-import { getDatabase, ref, set, onValue, push, remove, update} from "firebase/database";
+import { getDatabase, ref, set, onValue, push, remove, update, child} from "firebase/database";
 import { v4 as uuidv4 } from 'uuid';
 import app from '../firebase.js';
 import styles from '../styles/discussions.module.css';
@@ -27,15 +22,58 @@ var firebaseConfig = {
 };
 const db = getDatabase(app);
 const dbRef = ref(db, 'discussions');
+const userRef = ref(db, 'users');
+const courseRef = ref(db, 'courses');
 
 export default function DiscussionsList({ discussion }) {
     const [isEdit, setIsEdit] = useState(false);
     const [tempUuid, setTempUuid] = useState("");
     const [title, setTitle] = useState('');
+    const [author, setAuthor] = useState("");
+    const [date, setDate] = useState();
     const [comments, setComments] = useState([]);
+    const [isAuthor, setIsAuthor] = useState(false);
+    const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '0');
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || '0');
+    const [userIsTeacher, setUserIsTeacher] = useState(localStorage.getItem('userIsTeacher') === 'true');
+
+    const location = useLocation();
+    const course = location.state && location.state.course;
+
+    const idsToUse = window.location.href.split("/");
+    const courseid = idsToUse[idsToUse.indexOf("discussions")+1];
+
+    const newDiscussionsRef = ref(db, `courses/${courseid}/discussions`);
+
+    useEffect(() => {
+        onValue(child(newDiscussionsRef, `/${discussion.id}/comments`),(snapshot)=>{
+            try {
+                setComments(snapshotToArray(snapshot));
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        if (discussion.author === userEmail) {
+            setIsAuthor(true);
+        }
+    }, []);
+
+    const snapshotToArray = snapshot => {
+        var returnArr = [];
+
+        snapshot.forEach(function(childSnapshot) {
+            var item = childSnapshot.val();
+            returnArr.push(item);
+        });
+
+        return returnArr;
+    };
     
     const deleteDiscussion = () => {
-        const discussionRef = ref(db, `discussions/${discussion.id}`);
+        const discussionRef = ref(db, `courses/${courseid}/discussions/${discussion.id}`);
         remove(discussionRef);
     };
 
@@ -51,10 +89,12 @@ export default function DiscussionsList({ discussion }) {
 
     const writeToDatabase = () => {
         const uuid = uuidv4();
-        const discussionRef = ref(db, `discussions/${discussion.id}`);
+        const discussionRef = ref(db, `courses/${courseid}/discussions/${discussion.id}`);
         set(discussionRef, {
             title,
             comments,
+            author: discussion.author,
+            date: discussion.date,
             uuid,
         });
         setIsEdit(false);
@@ -62,21 +102,42 @@ export default function DiscussionsList({ discussion }) {
 
     return (
         <>
-        <div>
+        <br></br>
+        <div className={styles.discussionSurround}>
             <div className={styles.discussionsLink}><Link to={`discussion/${discussion.id}`}>{discussion.title}</Link></div>
-            <div className={styles.inputButton}>
-                <button onClick={deleteDiscussion}>Delete</button>
-                {isEdit ? (
+            <div className={styles.discussionsLink}>By {discussion.author}</div>
+            <div className={styles.discussionsLink}>Created on: {discussion.date}</div>
+            {isAuthor ? (
+                <>
+                    <div className={styles.editAndDeleteButton}>
+                        <button onClick={deleteDiscussion}>Delete &emsp; </button>
+                        {isEdit ? (
+                            <>
+                                <div className={styles.inputText}>
+                                    <input type="text" align="center" onChange={handleOnChange} value={title}/>
+                                </div>
+                                <button onClick={writeToDatabase}>Submit Changes &emsp; </button>
+                                <button onClick={() => setIsEdit(false)}>Cancel Changes</button>
+                            </>
+                        ) : (
+                            <button onClick={handleUpdate}>Edit</button>
+                        )}
+                    </div>
+                </>
+            ) : (
+                userIsTeacher ? (
                     <>
-                        <input type="text" align="center" onChange={handleOnChange} value={title}/>
-                        <button onClick={writeToDatabase}>Submit Changes</button>
-                        <button onClick={() => setIsEdit(false)}>Cancel Changes</button>
+                        <div className={styles.editAndDeleteButton}>
+                            <button onClick={deleteDiscussion}>Delete</button>
+                        </div>
                     </>
                 ) : (
-                    <button onClick={handleUpdate}>Edit</button>
-                )}
-            </div>
+                    <>
+                    </>
+                )
+            )}
         </div>
+        <br></br>
         </>
     )
 }

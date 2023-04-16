@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from '../styles/joinCourse.module.css';
 import { useForm } from 'react-hook-form';
 import { getDatabase } from "firebase/database";
@@ -6,6 +6,7 @@ import { ref, set, update } from 'firebase/database';
 import app from '../firebase.js';
 import {useNavigate} from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
+import Popup from './popup.jsx';
 
 const JoinClass = (props) => {
 
@@ -15,6 +16,12 @@ const JoinClass = (props) => {
 
     const navigate = useNavigate();
 
+    const [isOpen, setIsOpen] = useState(false);
+
+    const [isCMOpen, setIsCMOpen] = useState(false);
+   
+    const [courseCreated, setCourseCreated] = useState(false);
+
     // Might use a subset of the uuid as course code to join courses
     const onSubmit = (data) => {
         
@@ -22,30 +29,54 @@ const JoinClass = (props) => {
         
         const courseCode = data.courseCode;
 
-
-
         saveToUser(courseCode);
-
-        navigate('/teachercourses');
-
-        alert("Course Successfully Joined");
        
       };
 
-      const saveToUser = (courseCode)=> {
+      const saveToUser = (courseCode) => {
         const database = getDatabase(app);
         const userRef = ref(database, 'users/' + props.user.uid);
 
         const tempCourses = props.user.courses || []; //if no courses, then empty array to avoid error
 
-        tempCourses.push(courseCode);
+        var alreadyJoined = false;
+        
+        tempCourses.forEach((course) => {
 
-        update(userRef, {
-            courses: tempCourses,
-          }).catch((error) => {
-            console.error(error);
-          });
+            if(course === courseCode){
+                alreadyJoined = true;
+            }
+        });
 
+        if(!alreadyJoined){
+            tempCourses.push(courseCode);
+            update(userRef, {
+                courses: tempCourses,
+            }).catch((error) => {
+                console.error(error);
+            });
+
+            setCourseCreated(true);
+
+            setIsCMOpen(true);
+
+            //alert("Course Successfully Joined");
+        } else {
+            alreadyJoined = false; // resetting variable
+            setIsOpen(true);
+        }
+
+      };
+
+      const handleClose = () => {
+        setIsOpen(false);
+      };
+
+      const handleCloseCourseCreated = () => {
+
+        setIsOpen(false);
+
+        navigate('/teachercourses');
       };
 
     return (
@@ -53,6 +84,9 @@ const JoinClass = (props) => {
         <div className={styles.tempBody}>
             <div className={styles.container}>
                 <div className={styles.innerbg}>
+                    {isOpen && <Popup message={"Already Joined Course! Try Again."} isOpen={isOpen} onClose={handleClose}/>}
+
+                    {courseCreated && <Popup message={"Course Successfully Joined"} isOpen={isCMOpen} onClose={handleCloseCourseCreated}/>}
                     <h1 className={styles.boldy} >Join Class</h1>
                     <form className={styles.formStyle} onSubmit={handleSubmit(onSubmit)}>
                         <div className="">

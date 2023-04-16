@@ -14,6 +14,7 @@ import CreateGrade from './components/gradebookCreate.jsx'
 import Discussions from './components/Discussions.jsx';
 import DiscussionsList from './components/DiscussionsList.jsx';
 import Discussion from './components/Discussion.jsx';
+import DiscussionList from './components/DiscussionList.jsx';
 import Gradebook from './components/gradebook.jsx';
 import GradeEditor from './components/gradebookProfessor.jsx';
 import CoursePage from './components/coursepage.jsx';
@@ -73,10 +74,10 @@ function App() {
       <Route path="/joincourse" element={userEmail !== '0' ? <JoinClass user={user} updateUser={updateUser} /> : <Navigate to='/' />} />
       <Route path="/editcourse" element={userEmail !== '0' ? <EditClass user={user} updateUser={updateUser} /> : <Navigate to='/' />} />
       <Route path="/sidebar" element={userEmail !== '0' ? <Sidebar /> : <Navigate to='/' />}/>
-      <Route path="/discussions" element={userEmail !== '0' ? <Discussions/> : <Navigate to='/' />} />
+      <Route path="/discussions/:id" element={userEmail !== '0' ? <Discussions/> : <Navigate to='/' />} />
       <Route path="/coursepage/:courseCode" element={userEmail !== '0' ? <CoursePage user={user} /> : <Navigate to='/' />} />
-      <Route path="/discussion/:id" element={<Discussion />} />
-      <Route path="/discussions/discussion/:id" element={userEmail !== '0' ? <Discussion /> : <Navigate to='/' />} />
+      <Route path="/discussion/:courseid/:id" element={<Discussion />} />
+      <Route path="/discussions/:courseid/discussion/:id" element={userEmail !== '0' ? <Discussion /> : <Navigate to='/' />} />
         </Routes>
        </AuthContextProvider>
     </div>    

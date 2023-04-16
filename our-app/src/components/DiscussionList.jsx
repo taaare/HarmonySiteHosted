@@ -1,16 +1,13 @@
-/*
-NOTE:
-This is the code for how an individual comment is rendered in an individual discussion page.
-*/
-
 import {useEffect, useState} from "react";
 import ReactDOM from 'react-dom/client';
+import { Link, useLocation, BrowserRouter as Router, Route, Routes} from "react-router-dom";
 import { initializeApp } from "firebase/app"
-import { getDatabase, ref, set, onValue, push, remove, update, child, get} from "firebase/database";
+import { getDatabase, ref, set, onValue, push, remove, update, child} from "firebase/database";
 import { v4 as uuidv4 } from 'uuid';
 import app from '../firebase.js';
 import styles from '../styles/discussions.module.css';
 import Sidebar from "./sidebar";
+import Discussion from "./Discussion";
 
 //Edit
 var firebaseConfig = {
@@ -25,61 +22,129 @@ var firebaseConfig = {
 };
 const db = getDatabase(app);
 const dbRef = ref(db, 'discussions');
+const userRef = ref(db, 'users');
+const courseRef = ref(db, 'courses');
 
-export default function DiscussionList({ discussion, index }) {
+export default function DiscussionList({ comment }) {
     const [isEdit, setIsEdit] = useState(false);
     const [tempUuid, setTempUuid] = useState("");
     const [title, setTitle] = useState('');
     const [comments, setComments] = useState([]);
-    const [comment, setComment] = useState('');
-    const content = useState('');
-    const discussionRef = child(dbRef, `/${discussion.id}/comments[${index}]`);
-    console.log("Message");
-    console.log(child(dbRef, `/${discussion.id}/comments`).snapshot.val());
-    
-    const deleteComment = () => {
-        const commentsRef = child(dbRef, `/${discussion.id}/comments`);
-        remove(commentsRef);
+    const [commentTitle, setCommentTitle] = useState("");
+    const [commentAuthor, setCommentAuthor] = useState("");
+    const [commentDate, setCommentDate] = useState();
+    const [updatedCommentTitle, setUpdatedCommentTitle] = useState('');
+    const [isAuthor, setIsAuthor] = useState(false);
+    const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '0');
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || '0');
+    const [userIsTeacher, setUserIsTeacher] = useState(localStorage.getItem('userIsTeacher') === 'true');
+
+    const location = useLocation();
+    const course = location.state && location.state.course;
+
+    const idsToUse = window.location.href.split("/");
+    const courseid = idsToUse[idsToUse.indexOf("discussions")+1];
+    const discussionid = idsToUse[idsToUse.indexOf("discussion")+1];
+
+    const newDiscussionsRef = ref(db, `courses/${courseid}/discussions`);
+
+    useEffect(() => {
+        onValue(child(newDiscussionsRef, `/${discussionid}/comments/${comment.id}`),(snapshot)=>{
+            try {
+                setComments(snapshotToArray(snapshot));
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        if (comment.author === userEmail) {
+            setIsAuthor(true);
+        }
+    }, []);
+
+    const snapshotToArray = snapshot => {
+        var returnArr = [];
+
+        snapshot.forEach(function(childSnapshot) {
+            var item = childSnapshot.val();
+            returnArr.push(item);
+        });
+
+        return returnArr;
     };
     
+    const deleteComment = () => {
+        const commentRef = ref(db, `courses/${courseid}/discussions/${discussionid}/comments/${comment.id}`);
+        remove(commentRef);
+    };
+
     const handleUpdate = () => {
         const uuid = uuidv4();
         setIsEdit(true);
-        setTempUuid(discussion.uuid);
     };
 
     const handleOnChange = (e) => {
-        setTitle(e.target.value);
+        setCommentTitle(e.target.value);
+    };
+
+    const handleOnChange2 = (e) => {
+        setUpdatedCommentTitle(e.target.value);
     };
 
     const writeToDatabase = () => {
         const uuid = uuidv4();
-        const commentsRef = ref(db, `discussions/${discussion.id}`);
-        set(commentsRef, {
-            title,
-            comments : [
-                content,
-            ],
-            complete: false,
+        const commentRef = ref(db, `courses/${courseid}/discussions/${discussionid}/comments/${comment.id}`);
+
+        let today = new Date().toISOString().slice(0,10);
+
+        set(commentRef, {
+            title: updatedCommentTitle,
+            author: userEmail,
+            date: today,
         });
         setIsEdit(false);
     };
 
     return (
         <>
-        <div>
-            <div className={styles.discussionsLink}>{comments[index]}</div>
-            <button onClick={deleteComment}>Delete</button>
-            {isEdit ? (
+        <br></br>
+        <div className={styles.discussionSurround}>
+            <div className={styles.discussionsLink}>{comment.title}</div>
+            <div className={styles.discussionsLink}>Author: {comment.author}</div>
+            <div className={styles.discussionsLink}>Last Edited: {comment.date}</div>
+            {isAuthor ? (
                 <>
-                    <input type="text" align="center" onChange={handleOnChange} value={content}/>
-                    <button onClick={writeToDatabase}>Submit Changes</button>
-                    <button onClick={() => setIsEdit(false)}>Cancel Changes</button>
+                    <div className={styles.editAndDeleteButton}>
+                        <button onClick={() => deleteComment()}>Delete &emsp; </button>
+                        {isEdit ? (
+                            <>
+                                <div className={styles.inputText}>
+                                    <input type="text" align="center" onChange={handleOnChange2} value={updatedCommentTitle}/>
+                                </div>
+                                <button onClick={() => writeToDatabase()}>Submit Changes &emsp; </button>
+                                <button onClick={() => setIsEdit(false)}>Cancel Changes</button>
+                            </>
+                        ) : (
+                            <button onClick={handleUpdate}>Edit</button>
+                        )}
+                    </div>
                 </>
             ) : (
-                <button onClick={handleUpdate}>Edit</button>
+                userIsTeacher ? (
+                    <>
+                        <div className={styles.editAndDeleteButton}>
+                            <button onClick={() => deleteComment()}>Delete</button>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                    </>
+                )
             )}
         </div>
+        <br></br>
         </>
     )
 }

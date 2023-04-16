@@ -1,13 +1,7 @@
-/*
-NOTE:
-This is the page for the whole list of threads, with links you can click on.
-You will have the ability to edit the titles, and delete entire threads from here, but not comments.
-*/
-
 import {useEffect, useState} from "react";
 import ReactDOM from 'react-dom/client';
 import { initializeApp } from "firebase/app";
-import { Link, useLocation, BrowserRouter as Router, Route, Routes} from "react-router-dom";
+import { Link, useLocation, BrowserRouter as Router, Route, Routes, useParams, useSearchParams} from "react-router-dom";
 import { getDatabase, ref, set, onValue, push, remove, update} from "firebase/database";
 import { v4 as uuidv4 } from 'uuid';
 import styles from '../styles/discussions.module.css';
@@ -27,13 +21,25 @@ var firebaseConfig = {
 };
 const db = getDatabase(app);
 const dbRef = ref(db, 'discussions');
-//Could loop through every discussion, if it contains course code, then would import it
-//Maybe inside discussions collection, have course code?
+const userRef = ref(db, 'users');
+const courseRef = ref(db, 'courses');
 
 const Discussions = () => {
     const [title, setTitle] = useState('');
     const [comments, setComments] = useState();
+    const [author, setAuthor] = useState("");
+    const [date, setDate] = useState();
     const [discussionList, setDiscussionList] = useState();
+    const [userEmail, setUserEmail] = useState(localStorage.getItem('userEmail') || '0');
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || '0');
+    const [userIsTeacher, setUserIsTeacher] = useState(localStorage.getItem('userIsTeacher') === 'true');
+    const [course, setCourse] = useState();
+    const [courseTitle, setCourseTitle] = useState("");
+
+    const idsToUse = window.location.href.split("/");
+    const courseid = idsToUse[idsToUse.indexOf("discussions")+1];
+
+    const newDiscussionsRef = ref(db, `courses/${courseid}/discussions`);
 
     const handleOnChange = (e) => {
         setTitle(e.target.value);
@@ -43,17 +49,35 @@ const Discussions = () => {
     const createDiscussion = () => {
         const uuid = uuidv4();
 
-        set(ref(db, 'discussions/' + uuid), {
+        let index = discussionList.length+1;
+
+        onValue(newDiscussionsRef,(snapshot)=>{
+            try {
+                const discussions = snapshot.val();
+                for (let id in discussions) {
+                    if (Number(id) === index) {
+                        index = index + 1;
+                    }
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        });
+
+        let today = new Date().toISOString().slice(0,10);
+
+        set(ref(db, `courses/${courseid}/discussions/${index}`), {
             title,
             comments: [],
+            author: userEmail,
+            date: today,
             uuid: uuid,
         });
-        //will have discussions + courseCode, can get that via importing it each time, or passing it down from the course page
     };
 
     //read
     useEffect(() => {
-        onValue(dbRef,(snapshot)=>{
+        onValue(newDiscussionsRef,(snapshot)=>{
             try {
                 const discussions = snapshot.val();
                 const discussionList = [];
@@ -66,39 +90,50 @@ const Discussions = () => {
             }
         });
     }, []);
-    
-        return (
-            <>
-            
-            <div>
-                <div className={styles.brand}>Discussions</div>
-                <div className={styles.search} align="right">
-                    <div>
-                        <input type="text" name="q" placeholder="search"></input>
-                        <button className={styles.search}><i className="fa fa-search"></i></button>
-                    </div>
-                </div>
-                <div className={styles.navigate} align="center">
-                    <span><Link to={`/discussions`}>Home</Link></span>
-                </div>
-                <div>
-                    {discussionList ? discussionList.map((discussion, index) => <DiscussionsList discussion={discussion} key={index}/>) : ''}
-                </div>
-                <div>
-                    <div className={styles.inputText}>
-                        <input type="text" align="center" onChange={handleOnChange} value={title}/>
-                    </div>
-                    <div className={styles.inputButton}>
-                        <button onClick={createDiscussion}>Create Discussion</button>
-                    </div>
-                </div>
 
-                <div className={styles.pagination} align="center">
-                    pages: <a href="#">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">5</a>
+    useEffect(() => {
+        onValue(ref(db, `courses/${courseid}`),(snapshot)=>{
+            try {
+                const course = snapshot.val();
+                setCourse(course);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }, []);
+
+    useEffect(() => {
+        onValue(ref(db, `courses/${courseid}/courseName`),(snapshot)=>{
+            try {
+                const courseTitle = snapshot.val();
+                setCourseTitle(courseTitle);
+            } catch (e) {
+                console.log(e);
+            }
+        });
+    }, []);
+    
+    return (
+        <>
+        <div>
+            <div className={styles.brand}>{courseTitle} Discussions</div>
+            <div className={styles.navigate} align="center">
+                <span><Link to={`/coursepage/${courseid}`}>{courseTitle}</Link> - <Link to={`/discussions/${courseid}`}>Discussions</Link></span>
+            </div>
+            <div>
+                {discussionList ? discussionList.map((discussion, index) => <DiscussionsList discussion={discussion} key={index}/>) : ''}
+            </div>
+            <div>
+                <div className={styles.inputText}>
+                    <input type="text" align="center" onChange={handleOnChange} value={title}/>
+                </div>
+                <div className={styles.inputButton}>
+                    <button onClick={createDiscussion}>Create Discussion</button>
                 </div>
             </div>
-            </>
-        )
+        </div>
+        </>
+    )
 }
 
 export default Discussions;

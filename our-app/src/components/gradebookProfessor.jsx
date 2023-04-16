@@ -69,7 +69,7 @@ const GradeEditor = (props) => {
     });
 
     update(ref(database), updates)
-      .then(() => alert('Grades updated successfully'))
+      .then(() => console.log('Grades updated successfully'))
       .catch((error) => console.error('Error updating grades:', error));
   };
 

@@ -15,12 +15,9 @@ const Signin = ({ updateUserEmail }) => {
         try {
             await signIn(email, password);           
             updateUserEmail(email);
-            alert('Sign in successful.')
             navigate('/account');
         } catch (e) {
-            setError(e.message);
-            console.log(e.message);
-            alert('One or more fields are incorrect. Please try again.');
+            setError('Invalid email or password.');
         }
     };
 
@@ -40,6 +37,9 @@ const Signin = ({ updateUserEmail }) => {
             <div className='flex flex-col py-2'>
                 <label className= 'py-2 font-medium'>Password</label>
                 <input onChange = {(e) => setPassword(e.target.value)} className= 'w-full border p-3' type ="password" />
+            </div>
+            <div>
+                {error && <div className="e"> {error}</div>}
             </div>
             <button className = 'border border-purple-500 bg-purple-600 hover:bg-purple-500 w-full p-4 my-2 text-white'>Sign in</button>
         </form>

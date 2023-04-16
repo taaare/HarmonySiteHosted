@@ -41,7 +41,7 @@ const CreateClass = (props, {updateUser}) => {
         const database = getDatabase(app);
         const userRef = ref(database, 'users/' + props.user.uid);
 
-        const tempCourses = props.user.courses;
+        const tempCourses = props.user.courses || [];
 
         tempCourses.push(courseCode);
 

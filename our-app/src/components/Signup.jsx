@@ -39,8 +39,10 @@ const Signup = ({updateUserIsTeacher}) => {
                 <label className= 'py-2 font-medium'>Password</label>
                 <input onChange={(e) => setPassword(e.target.value)} className= 'w-full border p-3' type ="password" />
             </div>
-            <input type="checkbox" id="isTeacher" name="isTeacher" />
-            <label htmlFor="isTeacher">I am a teacher</label>
+            <div className = "flex justify-center items-center mb-4">
+                <input type="checkbox" id="isTeacher" name="isTeacher" className = 'w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600'/>
+                <label htmlFor="isTeacher" className = 'ml-2 text-sm font-medium text-black'>I am a teacher</label>
+            </div>
             <div>
                 {error && <div className="e"> {error}</div>}
             </div>

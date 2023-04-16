@@ -22,10 +22,7 @@ const Sidebar = (props) => {
                     <Link to="/teachercourses" className={styles.sidebartext}>Courses</Link>
                     </div>
                     <div className={styles.sidebartextrectangle}>
-                    <Link to="/gradebook" className={styles.sidebartext}>Gradebook</Link>
-                    </div>
-                    <div className={styles.sidebartextrectangle}>
-                    <Link to="/Discussions" className={styles.sidebartext}>Discussions</Link>
+                    <Link to="/gradebook" className={styles.sidebartext}>Grades</Link>
                     </div>
                 </div>
             </div>

@@ -8,7 +8,7 @@ import { getDatabase, ref, set, onValue, push} from "firebase/database";
 
 
 
-const CreateGrade = () => {
+const CreateGrade = (props) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -41,9 +41,6 @@ const CreateGrade = () => {
           const database = getDatabase(app);
           const assignmentRef = ref(database, 'courses/' + courseIDs[i] + '/assignments/' + assignment);
           set(assignmentRef, data);
-          alert("Assignment created successfully");
-        } else {
-          alert("Course does not exist");
         }
       }
     };

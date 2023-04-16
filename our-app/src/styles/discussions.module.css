@@ -49,7 +49,7 @@ header{
 }
 .brand{
     text-align: center;
-    font-size: 50px;
+    font-size: 30px;
     color: black;
     background-color: #8EA7B4;
 }
@@ -107,11 +107,12 @@ textarea {
 }
 .navigate {
     background-color: silver;
+    color: black;
 }
 .inputText {
     text-align: center;
-    width: 600px;
-    height: 300px;
+    width: 1325px;
+    height: 20px;
 }
 .inputButton {
     background-color: #192C3E;
@@ -126,11 +127,28 @@ textarea {
 }
 .discussionsLink {
     text-align: center;
-    color: white;
+    color: black;
 }
 a {
-    color: white;
+    color: black;
 }
 h1 {
     color: white;
+}
+.discussionSurround {
+    background-color: white;
+    border-color: black;
+    border-style: solid;
+    border-width: 2.5px;
+}
+.editAndDeleteButton {
+    background-color: silver;
+    border: none;
+    color: black;
+    margin-top: 15px;
+    padding: 15px 40px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
 }
