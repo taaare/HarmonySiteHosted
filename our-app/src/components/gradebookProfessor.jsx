@@ -96,7 +96,7 @@ const GradeEditor = (props) => {
     <div className="container">
       <div className="innerbg">
         <h1>Gradebook Professor Editor</h1>
-        <Link to="/create">
+        <Link to="/creategrade">
           <button id="add">Add Assignment</button>
         </Link>
         <select id="classSelect" value={selectedClass} onChange={handleClassChange}>
