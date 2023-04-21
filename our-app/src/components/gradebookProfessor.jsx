@@ -16,6 +16,9 @@ const GradeEditor = (props) => {
   const [selectedUser, setSelectedUser] = useState('');
   const [assignments, setAssignments] = useState([]);
   const [statusMessage, setStatusMessage] = useState(''); 
+  const [userUid, setUserUid] = useState(''); 
+
+
 
   useEffect(() => {
     // Fetch classes and users from the database
@@ -31,7 +34,7 @@ const GradeEditor = (props) => {
 
     onValue(usersRef, (snapshot) => {
       const data = snapshot.val();
-      const userList = Object.values(data);
+      const userList = Object.entries(data).map(([key, userData]) => ({ key, ...userData }));
       setUsers(userList);
     });
   }, []);
@@ -50,7 +53,7 @@ const GradeEditor = (props) => {
       setAssignments([]);
     }
   }, [selectedClass, selectedUser]);
-  console.log(selectedUser);
+  
 
   const handleClassChange = (e) => {
     setSelectedClass(e.target.value);
@@ -58,15 +61,20 @@ const GradeEditor = (props) => {
 
   const handleUserChange = (e) => {
     setSelectedUser(e.target.value);
+    users.forEach((u) => {
+      if (e.target.value === u.email) {
+        setUserUid(u.key);
+      }
+    });
   };
-
+  console.log(userUid);
   const handleSubmit = () => {
     const database = getDatabase();
     const updates = {};
 
     assignments.forEach((assignment, index) => {
       const grade = document.getElementsByClassName('grade2')[index].value;
-      updates[`courses/${selectedClass}/assignments/${assignment.assignmentName}/grades/${selectedUser.uid}`] = grade;
+      updates[`courses/${selectedClass}/assignments/${assignment.assignmentName}/grades/${userUid}`] = grade;
     });
 
     update(ref(database), updates)
@@ -79,8 +87,6 @@ const GradeEditor = (props) => {
         setStatusMessage('Unsuccessful'); // Update status message
       });
   };
-
-  console.log(assignments);
 
   const renderAssignments = () => {
     return assignments.map((assignment) => (
