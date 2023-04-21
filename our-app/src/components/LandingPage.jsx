@@ -55,7 +55,7 @@ const LandingPage = () => {
                   </div>
                   <div className="max-w-6xl mx-auto px-4">
                   <div className="flex flex-col lg:flex-row items-center mt-16">
-                      <div className="flex-1">
+                      <div className="flex-1 pr-6">
                         {/*Insert course page screenshot here >*/}  <img src={courses} alt="Feature 3" className="h-full w-full mb-6 lg:mb-0" /> 
                       </div>
                       <div className="flex-1">
