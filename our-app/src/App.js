@@ -18,6 +18,7 @@ import DiscussionList from './components/DiscussionList.jsx';
 import Gradebook from './components/gradebook.jsx';
 import GradeEditor from './components/gradebookProfessor.jsx';
 import CoursePage from './components/coursepage.jsx';
+import LandingPage from './components/LandingPage.jsx';
 
 
 function App() {
@@ -32,10 +33,10 @@ function App() {
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')) || '0');
 
-  const updateUser= (newUser) => {
+  const updateUser = (newUser) => {
 
     setUser(newUser);
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(newUser));
   };
 
   const [userIsTeacher, setUserIsTeacher] = useState(localStorage.getItem('userIsTeacher') === 'true');
@@ -51,10 +52,11 @@ function App() {
 
       <AuthContextProvider>
 
-      {userEmail != '0' && <Sidebar userEmail={userEmail} />}
+      {userEmail != '0' && window.location.pathname !== "/" && <Sidebar userEmail={userEmail} />}
       
        <Routes>
-        <Route path = '/' element = {<Signin updateUserEmail={updateUserEmail}/>} />
+        <Route path = "/" element = {<LandingPage />} />
+        <Route path = '/signin' element = {<Signin updateUserEmail={updateUserEmail}/>} />
         <Route path="/signup" element={<Signup updateUserIsTeacher={updateUserIsTeacher} />} />
         <Route
           path="/account"
@@ -62,53 +64,25 @@ function App() {
             <ProtectedRoute>
               {(userEmail !== '0' && (
                 <Account updateUserEmail={updateUserEmail} updateUser={updateUser} isTeacher={userIsTeacher} />
-              )) || <Navigate to="/" />}
+              )) || <Navigate to="/signin" />}
             </ProtectedRoute>
           }
         />
       <Route path="/teachercourses" element={user !== '0' ? <TeacherCourses userEmail={userEmail} user={user} /> : <Navigate to='/account' />} />
-      <Route path="/createcourse" element={userEmail !== '0' ? <CreateClass user={user} /> : <Navigate to='/' />} />
-      <Route path="/creategrade" element={userEmail !== '0' ? <CreateGrade /> : <Navigate to="/" />} />
-      <Route path="/gradebook" element={userEmail !== '0' ? (user.isTeacher ? <GradeEditor userEmail={userEmail} user={user} /> : <Gradebook userEmail={userEmail} user={user} />) : <Navigate to='/' />} />
-      <Route path="/createcourse" element={userEmail !== '0' ? <CreateClass user={user} updateUser={updateUser} /> : <Navigate to='/' />} />
-      <Route path="/joincourse" element={userEmail !== '0' ? <JoinClass user={user} updateUser={updateUser} /> : <Navigate to='/' />} />
-      <Route path="/editcourse" element={userEmail !== '0' ? <EditClass user={user} updateUser={updateUser} /> : <Navigate to='/' />} />
-      <Route path="/sidebar" element={userEmail !== '0' ? <Sidebar /> : <Navigate to='/' />}/>
-      <Route path="/discussions/:id" element={userEmail !== '0' ? <Discussions/> : <Navigate to='/' />} />
-      <Route path="/coursepage/:courseCode" element={userEmail !== '0' ? <CoursePage user={user} /> : <Navigate to='/' />} />
+      <Route path="/creategrade" element={userEmail !== '0' ? <CreateGrade /> : <Navigate to="/signin" />} />
+      <Route path="/gradebook" element={userEmail !== '0' ? (user.isTeacher ? <GradeEditor userEmail={userEmail} user={user} /> : <Gradebook userEmail={userEmail} user={user} />) : <Navigate to='/signin' />} />
+      <Route path="/createcourse" element={userEmail !== '0' ? <CreateClass user={user} updateUser={updateUser} /> : <Navigate to='/signin' />} />
+      <Route path="/joincourse" element={userEmail !== '0' ? <JoinClass user={user} updateUser={updateUser} /> : <Navigate to='/signin' />} />
+      <Route path="/editcourse" element={userEmail !== '0' ? <EditClass user={user} updateUser={updateUser} /> : <Navigate to='/signin' />} />
+      <Route path="/sidebar" element={userEmail !== '0' ? <Sidebar /> : <Navigate to='/signin' />}/>
+      <Route path="/discussions/:id" element={userEmail !== '0' ? <Discussions/> : <Navigate to='/signin' />} />
+      <Route path="/coursepage/:courseCode" element={userEmail !== '0' ? <CoursePage user={user} /> : <Navigate to='/signin' />} />
       <Route path="/discussion/:courseid/:id" element={<Discussion />} />
-      <Route path="/discussions/:courseid/discussion/:id" element={userEmail !== '0' ? <Discussion /> : <Navigate to='/' />} />
+      <Route path="/discussions/:courseid/discussion/:id" element={userEmail !== '0' ? <Discussion /> : <Navigate to='/signin' />} />
         </Routes>
        </AuthContextProvider>
     </div>    
   );
 }
-
-/*
-Discussion Forum Content
-*/
-
-function hideIconBar() {
-  var iconBar = document.getElementById("iconBar");
-  var navigation = document.getElementById("navigation");
-  iconBar.setAttribute("style", "display:none;");
-  navigation.classList.remove("hide");
-}
-
-function showIconBar() {
-  var iconBar = document.getElementById("iconBar");
-  var navigation = document.getElementById("navigation");
-  iconBar.setAttribute("style", "display:block;");
-  navigation.classList.add("hide");
-}
-
-function showComment() {
-  var commentArea = document.getElementById("comment-area");
-  commentArea.setAttribute("style", "display:block;");
-}
-
-/*
-End discussion forum content
-*/
 
 export default App;

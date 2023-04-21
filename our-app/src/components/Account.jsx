@@ -10,16 +10,18 @@ const Account = ({ updateUserEmail, updateUser, isTeacher }) => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
+
+    window.localStorage.clear();
+
     try {
       await logout();
-      navigate('/');
+      navigate('/signin');
     } catch (e) {
       console.log(e.message);
     }
 
+    updateUser('0');
     updateUserEmail('0');
-
-    window.localStorage.clear()
 
   }
 
@@ -43,7 +45,6 @@ const Account = ({ updateUserEmail, updateUser, isTeacher }) => {
         const tempUser = snapshot.val();
 
         tempUser.uid = snapshot.key;
-
 
         updateUser(tempUser);
       } else {

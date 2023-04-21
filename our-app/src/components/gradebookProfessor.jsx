@@ -15,6 +15,7 @@ const GradeEditor = (props) => {
   const [selectedClass, setSelectedClass] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [assignments, setAssignments] = useState([]);
+  const [statusMessage, setStatusMessage] = useState(''); 
 
   useEffect(() => {
     // Fetch classes and users from the database
@@ -49,7 +50,7 @@ const GradeEditor = (props) => {
       setAssignments([]);
     }
   }, [selectedClass, selectedUser]);
-  console.log(selectedClass);
+  console.log(selectedUser);
 
   const handleClassChange = (e) => {
     setSelectedClass(e.target.value);
@@ -65,12 +66,18 @@ const GradeEditor = (props) => {
 
     assignments.forEach((assignment, index) => {
       const grade = document.getElementsByClassName('grade2')[index].value;
-      updates[`courses/${selectedClass}/assignments/${assignment.assignmentName}/grades/${props.user.uid}`] = grade;
+      updates[`courses/${selectedClass}/assignments/${assignment.assignmentName}/grades/${selectedUser.uid}`] = grade;
     });
 
     update(ref(database), updates)
-      .then(() => console.log('Grades updated successfully'))
-      .catch((error) => console.error('Error updating grades:', error));
+      .then(() => {
+        console.log('Grades updated successfully');
+        setStatusMessage('Successful'); // Update status message
+      })
+      .catch((error) => {
+        console.error('Error updating grades:', error);
+        setStatusMessage('Unsuccessful'); // Update status message
+      });
   };
 
   console.log(assignments);
@@ -84,7 +91,7 @@ const GradeEditor = (props) => {
             type="text"
             className="grade2"
             defaultValue={assignment.grade || ''}
-            placeholder={assignment?.grades?.[props.user.uid] ?? ''}
+            placeholder={assignment?.grades?.[selectedUser.uid] ?? ''}
           />
           / {assignment.maxPoints}
         </div>
@@ -118,6 +125,7 @@ const GradeEditor = (props) => {
         <button id="update" onClick={handleSubmit}>
           Submit Grades
         </button>
+        <span id="statusMessage"> {statusMessage} </span>
         <br/><br/><br/>
         {renderAssignments()}
       </div>

@@ -25,7 +25,7 @@ const dbRef = ref(db, `discussions`);
 const userRef = ref(db, 'users');
 const courseRef = ref(db, 'courses');
 
-export default function Discussion() {
+const Discussion = (props) => {
     const [title, setTitle] = useState('');
     const [comments, setComments] = useState([]);
     const [comment, setComment] = useState('');
@@ -45,6 +45,9 @@ export default function Discussion() {
     const [courseTitle, setCourseTitle] = useState("");
 
     const course = location.state && location.state.course;
+
+    const coursePath = `/coursepage/${props.courseCode}`;
+    const course2 = props.course;
 
     const idsToUse = window.location.href.split("/");
     const courseid = idsToUse[idsToUse.indexOf("discussions")+1];
@@ -138,21 +141,21 @@ export default function Discussion() {
             <header>
                 <div className={styles.brand}>{courseTitle} Discussions</div>
                 <div className={styles.navigate} align="center">
-                    <span><Link to={`/coursepage/${courseid}`}>{courseTitle}</Link> - <Link to={`/discussions/${courseid}`}>Discussions</Link> - <Link to={``}>{discussion.title}</Link></span>
+                    <span><Link to={coursePath} state={{course}} className={styles.navBarLink}>{courseTitle}</Link> - <Link to={`/discussions/${courseid}`} className={styles.navBarLink}>Discussions</Link> - <Link to={``} className={styles.navBarLink}>{discussion.title}</Link></span>
                 </div>
             </header>
             <div>
                 {commentsList?.map((comment, index) => <DiscussionList comment={comment} key={index}/>)}
             </div>
-            <div>
-                <div className={styles.inputText}>
-                    <input type="text" onChange={handleOnChange} value={commentTitle}/>
-                </div>
-                <div className={styles.inputButton}>
-                    <button onClick={createComment}>Add Comment</button>
-                </div>
+            <div className={styles.inputDiv}>
+                <input className={styles.inputText} type="text" placeholder="Enter comment" onChange={handleOnChange} value={commentTitle}/>
+            </div>
+            <div className={styles.inputButtonDiv}>
+                <button className={styles.inputButton} onClick={createComment}>Add Comment</button>
             </div>
         </div>
         </>
     )
 }
+
+export default Discussion;

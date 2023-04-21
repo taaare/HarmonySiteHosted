@@ -104,23 +104,25 @@ export default function DiscussionsList({ discussion }) {
         <>
         <br></br>
         <div className={styles.discussionSurround}>
-            <div className={styles.discussionsLink}><Link to={`discussion/${discussion.id}`}>{discussion.title}</Link></div>
-            <div className={styles.discussionsLink}>By {discussion.author}</div>
-            <div className={styles.discussionsLink}>Created on: {discussion.date}</div>
+            <div className={styles.discussionsLink}><Link to={`discussion/${discussion.id}`} className={styles.discussionsLink}>{discussion.title}</Link></div>
+            <div className={styles.discussionsSubtitle}>By {discussion.author}</div>
+            <div className={styles.discussionsSubtitle}>Created on: {discussion.date}</div>
             {isAuthor ? (
                 <>
                     <div className={styles.editAndDeleteButton}>
-                        <button onClick={deleteDiscussion}>Delete &emsp; </button>
+                        <button onClick={deleteDiscussion} className={styles.updateButton}>Delete</button>
+                        &emsp;
                         {isEdit ? (
                             <>
-                                <div className={styles.inputText}>
-                                    <input type="text" align="center" onChange={handleOnChange} value={title}/>
+                                <div className={styles.inputDiv}>
+                                    <input className={styles.inputText} type="text" placeholder="Enter updated title" align="center" onChange={handleOnChange} value={title}/>
                                 </div>
-                                <button onClick={writeToDatabase}>Submit Changes &emsp; </button>
-                                <button onClick={() => setIsEdit(false)}>Cancel Changes</button>
+                                <button onClick={writeToDatabase} className={styles.updateButton}>Submit Changes</button>
+                                &emsp;
+                                <button onClick={() => setIsEdit(false)} className={styles.updateButton}>Cancel Changes</button>
                             </>
                         ) : (
-                            <button onClick={handleUpdate}>Edit</button>
+                            <button onClick={handleUpdate} className={styles.updateButton}>Edit</button>
                         )}
                     </div>
                 </>
@@ -128,7 +130,7 @@ export default function DiscussionsList({ discussion }) {
                 userIsTeacher ? (
                     <>
                         <div className={styles.editAndDeleteButton}>
-                            <button onClick={deleteDiscussion}>Delete</button>
+                            <button onClick={deleteDiscussion} className={styles.updateButton}>Delete</button>
                         </div>
                     </>
                 ) : (

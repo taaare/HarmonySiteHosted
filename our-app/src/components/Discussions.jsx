@@ -24,7 +24,7 @@ const dbRef = ref(db, 'discussions');
 const userRef = ref(db, 'users');
 const courseRef = ref(db, 'courses');
 
-const Discussions = () => {
+const Discussions = (props) => {
     const [title, setTitle] = useState('');
     const [comments, setComments] = useState();
     const [author, setAuthor] = useState("");
@@ -38,6 +38,9 @@ const Discussions = () => {
 
     const idsToUse = window.location.href.split("/");
     const courseid = idsToUse[idsToUse.indexOf("discussions")+1];
+
+    const coursePath = `/coursepage/${props.courseCode}`;
+    const course2 = props.course;
 
     const newDiscussionsRef = ref(db, `courses/${courseid}/discussions`);
 
@@ -118,18 +121,16 @@ const Discussions = () => {
         <div>
             <div className={styles.brand}>{courseTitle} Discussions</div>
             <div className={styles.navigate} align="center">
-                <span><Link to={`/coursepage/${courseid}`}>{courseTitle}</Link> - <Link to={`/discussions/${courseid}`}>Discussions</Link></span>
+                <span><Link to={coursePath} state={{course}} className={styles.navBarLink}>{courseTitle}</Link> - <Link to={`/discussions/${courseid}`} className={styles.navBarLink}>Discussions</Link></span>
             </div>
             <div>
                 {discussionList ? discussionList.map((discussion, index) => <DiscussionsList discussion={discussion} key={index}/>) : ''}
             </div>
-            <div>
-                <div className={styles.inputText}>
-                    <input type="text" align="center" onChange={handleOnChange} value={title}/>
-                </div>
-                <div className={styles.inputButton}>
-                    <button onClick={createDiscussion}>Create Discussion</button>
-                </div>
+            <div className={styles.inputDiv}>
+                <input className={styles.inputText} type="text" align="center" placeholder="Enter discussion title" onChange={handleOnChange} value={title}/>
+            </div>
+            <div className={styles.inputButtonDiv}>
+                <button className={styles.inputButton} onClick={createDiscussion}>Create Discussion</button>
             </div>
         </div>
         </>

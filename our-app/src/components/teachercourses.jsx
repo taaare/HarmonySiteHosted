@@ -16,9 +16,9 @@ class TeacherCourses extends Component {
         user: null,
 
         userEmail: '0',
+
+        loading: true,
     };
-    
-    this.handleAddingComponent = this.handleAddingComponent.bind(this) //change
 
   }
 
@@ -32,8 +32,8 @@ class TeacherCourses extends Component {
       user: this.props.user,
     }, () => {    
       
-
       if(this.state.user.courses && this.state.user.courses.length > 0){
+
         for(var i = 0; i < this.state.user.courses.length; i++){
 
           const courseRef = ref(database, 'courses/' + this.state.user.courses[i]);
@@ -43,43 +43,49 @@ class TeacherCourses extends Component {
             if(course !== null){
               userCourses.push(course);
             }
-  
+
+            this.setState({
+              courses: userCourses,
+              courseCount: userCourses.length,
+              loading: false,
+            });
+
           }, (error) => {
             console.error(error);
           });
         } // ending of for loop that loops through all courses in user and set's state after to help display courses for user
-  
-  
-      this.setState({
-        courses: userCourses,
-        courseCount: userCourses.length
-      });
+        
+      } else{
+        this.setState({
+          loading: false,
+        });
       }
-  
+
   }
   
   );
 
   }
 
-  handleAddingComponent() {
-    this.setState({courseCount: this.state.courseCount + 1})     
-}
 
 addClassBanner(){
+
     let classBanners = [];
     
-    for(var i = 0; i < this.state.courseCount; i++){
-        classBanners.push(
-            
-           <ClassBanner key={this.state.courses[i].courseCode}
-                        courseName={this.state.courses[i].courseName} 
-                        instructorName={this.state.courses[i].instructorName} 
-                        courseCode={this.state.courses[i].courseCode}
-                        course={this.state.courses[i]} />
+      for(var i = 0; i < this.state.courses.length; i++){
 
-         ) // coursecode becomes one of these so that we can use props to display right course page (using keys)
-    }
+        classBanners.push(
+          
+          <ClassBanner key={this.state.courses[i].courseCode}
+                       courseName={this.state.courses[i].courseName} 
+                       instructorName={this.state.courses[i].instructorName} 
+                       courseCode={this.state.courses[i].courseCode}
+                       course={this.state.courses[i]} />
+
+        ) // coursecode becomes one of these so that we can use props to display right course page (using keys)
+
+  }
+
 
     return classBanners;
 }
@@ -93,7 +99,18 @@ addClassBanner(){
 
             <div className={styles.container}>
 
-                {this.addClassBanner()} {/*Entry point for class banners*/}
+                {this.state.loading ? (
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    height: '100vh',
+                    fontWeight: 'bold',
+                    fontSize: '32px',
+                    color: 'white',
+                  }}>Loading...</div> // Show a loading message or a spinner
+                ) : (
+                  this.addClassBanner() // Entry point for class banners
+                )}
               
               {
               (this.state.user && this.state.user.isTeacher) ? (

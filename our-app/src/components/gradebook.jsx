@@ -12,6 +12,7 @@ const Gradebook = (props) => {
   const [assignments, setAssignments] = useState([]);
   const [courses, setCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState('');
+  const [userCourses, setUserCourses] = useState([]);
 
   const database = getDatabase(app);
   
@@ -30,7 +31,41 @@ const Gradebook = (props) => {
     });
   }, []);
 
-
+  useEffect(() => {
+    // Fetch all courses
+    const coursesRef = ref(database, 'courses');
+    const userCoursesRef = ref(database, `users/${props.user.uid}/courses`); // Add the correct path to the user's courses
+  
+    // Fetch user's enrolled courses
+    onValue(userCoursesRef, async (snapshot) => {
+      const data = snapshot.val() || {};
+      const enrolledCourseIds = Object.values(data); // Use Object.values instead of Object.keys
+  
+      // Fetch corresponding course details for each enrolled course
+      const fetchedUserCourses = await Promise.all(
+        enrolledCourseIds.map(async (courseId) => {
+          const courseSnapshot = await get(ref(database, `courses/${courseId}`));
+          return {
+            id: courseId,
+            ...courseSnapshot.val(),
+          };
+        }),
+      );
+  
+      setUserCourses(fetchedUserCourses);
+    });
+  
+    // Fetch all course data
+    onValue(coursesRef, (snapshot) => {
+      const data = snapshot.val();
+      const courseList = Object.entries(data).map(([id, courseData]) => ({
+        id,
+        ...courseData,
+      }));
+      setCourses(courseList);
+    });
+  }, []);
+  
   useEffect(() => {
     const coursesRef = ref(database, 'courses');
     onValue(coursesRef, (snapshot) => {
@@ -80,7 +115,7 @@ const Gradebook = (props) => {
           <h1>Gradebook</h1>
           <select id="gradeDropdown" value={selectedCourse} onChange={handleCourseChange}>
             <option value="">Select a class to view</option>
-            {courses.map((course) => (
+            {userCourses.map((course) => (
               <option key={course.id} value={course.id}>
                 {course.courseName}
               </option>
@@ -90,7 +125,7 @@ const Gradebook = (props) => {
           {assignments.map((assignment, index) => (
             <div key={index} className="gradeSlide">
               <div className="assignment">{assignment.assignmentName}</div>
-              <div className="grade">{assignment?.grades?.[props.user.uid] ?? ''} / {assignment.maxPoints}</div>
+              <div className="grade">{assignment?.grades?.[props.user.uid] ?? console.log(assignment.grades)} / {assignment.maxPoints}</div>
               <br/><br/><br/><br/><br/>
             </div>
           ))}

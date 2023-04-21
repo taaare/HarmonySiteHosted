@@ -27,7 +27,7 @@ const Signup = ({updateUserIsTeacher}) => {
        <div>
         <h1 className = 'text-2xl font-bold py-2 text-black'>Sign up for an account</h1>
         <p className = 'py-2'>
-            Already have an account yet? <Link to='/' className = 'underline text-black'>Sign in.</Link> 
+            Already have an account yet? <Link to='/signin' className = 'underline text-black'>Sign in.</Link> 
         </p>
         </div> 
         <form onSubmit = {handleSubmit}>

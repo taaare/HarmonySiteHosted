@@ -15,7 +15,7 @@ const Sidebar = (props) => {
                         {props.userEmail}
                     </p>
                     <div className={styles.sidebartextrectangle}>
-
+                    
                     <Link to="/account" className={styles.sidebartext}>Home</Link>
                     </div>
                     <div className={styles.sidebartextrectangle}>

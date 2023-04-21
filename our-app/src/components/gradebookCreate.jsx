@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import '../styles/coursecreate.css';
+import styles from '../styles/coursecreate.module.css';
 import Sidebar from './sidebar.jsx';
 import { useForm } from 'react-hook-form';
 import app from '../firebase.js';
@@ -48,30 +48,30 @@ const CreateGrade = (props) => {
     return (
     <>
         <Sidebar/>
-        <div className="tempBody">
-            <div className="container">
-                <div className="innerbg">
+        <div className={styles.tempBody}>
+            <div className={styles.container}>
+                <div className={styles.innerbg}>
                     <h1 id="myh1">Create Assignment</h1>
                     
                     <form className="course-form" onSubmit={handleSubmit(onSubmit)}>
                         <div className="">
-                            <label htmlFor="assignmentName" className="inputheader">Assignment Name</label><br />
+                            <label htmlFor="assignmentName" className={styles.inputheader}>Assignment Name</label><br />
                             <input id="assignment-name" type="text" placeholder="Homework 1" {...register("assignmentName", { required: true })} />
                         </div>
                         <div>
-                            <label htmlFor="maxPoints" className="inputheader">Max Points</label><br />
+                            <label htmlFor="maxPoints" className={styles.inputheader}>Max Points</label><br />
                             <input id="max-points" type="text" placeholder="100" {...register("maxPoints", { required: true })} />
                         </div>
                         <div>
-                            <label htmlFor="dueDate" className="inputheader">Due Date</label><br />
+                            <label htmlFor="dueDate" className={styles.inputheader}>Due Date</label><br />
                             <input id="end-time" type="date" {...register("dueDate", { required: true })} />
                         </div>
                         <div>
-                            <label htmlFor="class" className="inputheader">Class Name</label><br />
+                            <label htmlFor="class" className={styles.inputheader}>Class Name</label><br />
                             <input id="class-name" type="text" {...register("className", { required: true })} />
                         </div>
                         <div className="center">
-                            <button type="submit" className="button submit-form">Submit</button>
+                            <button type="submit" className={styles.button}>Submit</button>
                         </div>
                     </form>
                 </div>

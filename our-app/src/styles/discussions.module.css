@@ -52,6 +52,7 @@ header{
     font-size: 30px;
     color: black;
     background-color: #8EA7B4;
+    font-weight: bold;
 }
 body{
     background: #192C3E;
@@ -111,23 +112,48 @@ textarea {
 }
 .inputText {
     text-align: center;
-    width: 1325px;
-    height: 20px;
+    width: 50%;
+    height: 80px;
+    padding: 12px 20px;
+    background-position: 10px 10px;
+    border: 2px solid black;
+    font-weight: bold;
+    justify-content: center;
 }
 .inputButton {
-    background-color: #192C3E;
-    border: none;
-    color: white;
-    margin-top: 15px;
+    background-color: silver;
+    width: 50%;
+    border: 2px solid black;
+    color: black;
     padding: 15px 40px;
     text-align: center;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+    justify-content: center;
+}
+.navBarLink {
+    color: blue;
+    text-underline-position: below;
+    text-decoration: underline;
 }
 .discussionsLink {
     text-align: center;
+    color: blue;
+    font-weight: bold;
+    font-size: 20px;
+    text-underline-position: below;
+    text-decoration: underline;
+}
+.discussionsSubtitle {
+    text-align: center;
     color: black;
+}
+.commentsContent {
+    text-align: center;
+    color: black;
+    font-weight: bold;
+    font-size: 18px;
 }
 a {
     color: black;
@@ -142,13 +168,26 @@ h1 {
     border-width: 2.5px;
 }
 .editAndDeleteButton {
-    background-color: silver;
+    background-color: white;
     border: none;
     color: black;
-    margin-top: 15px;
     padding: 15px 40px;
     text-align: center;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
+}
+.inputDiv {
+    text-align: center;
+}
+.inputButtonDiv {
+    text-align: center;
+}
+.updateButton {
+    background-color: silver;
+    border-color: black;
+    border-style: solid;
+    border-width: 2.5px;
+    height: 50px;
+    width: 100px;
 }

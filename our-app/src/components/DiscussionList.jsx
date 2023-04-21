@@ -111,23 +111,25 @@ export default function DiscussionList({ comment }) {
         <>
         <br></br>
         <div className={styles.discussionSurround}>
-            <div className={styles.discussionsLink}>{comment.title}</div>
-            <div className={styles.discussionsLink}>Author: {comment.author}</div>
-            <div className={styles.discussionsLink}>Last Edited: {comment.date}</div>
+            <div className={styles.commentsContent}>{comment.title}</div>
+            <div className={styles.discussionsSubtitle}>Author: {comment.author}</div>
+            <div className={styles.discussionsSubtitle}>Last Edited: {comment.date}</div>
             {isAuthor ? (
                 <>
                     <div className={styles.editAndDeleteButton}>
-                        <button onClick={() => deleteComment()}>Delete &emsp; </button>
+                        <button onClick={() => deleteComment()} className={styles.updateButton}>Delete</button>
+                        &emsp;
                         {isEdit ? (
                             <>
-                                <div className={styles.inputText}>
-                                    <input type="text" align="center" onChange={handleOnChange2} value={updatedCommentTitle}/>
+                                <div className={styles.inputDiv}>
+                                    <input className={styles.inputText} type="text" placeholder="Enter updated comment" align="center" onChange={handleOnChange2} value={updatedCommentTitle}/>
                                 </div>
-                                <button onClick={() => writeToDatabase()}>Submit Changes &emsp; </button>
-                                <button onClick={() => setIsEdit(false)}>Cancel Changes</button>
+                                <button onClick={() => writeToDatabase()} className={styles.updateButton}>Submit Changes</button>
+                                &emsp;
+                                <button onClick={() => setIsEdit(false)} className={styles.updateButton}>Cancel Changes</button>
                             </>
                         ) : (
-                            <button onClick={handleUpdate}>Edit</button>
+                            <button onClick={handleUpdate} className={styles.updateButton}>Edit</button>
                         )}
                     </div>
                 </>
@@ -135,7 +137,7 @@ export default function DiscussionList({ comment }) {
                 userIsTeacher ? (
                     <>
                         <div className={styles.editAndDeleteButton}>
-                            <button onClick={() => deleteComment()}>Delete</button>
+                            <button onClick={() => deleteComment()} className={styles.updateButton}>Delete</button>
                         </div>
                     </>
                 ) : (

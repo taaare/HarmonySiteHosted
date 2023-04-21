@@ -8,7 +8,7 @@ import {useNavigate} from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import Popup from './popup.jsx';
 
-const JoinClass = (props) => {
+const JoinClass = ({user, updateUser}) => {
 
 
 
@@ -35,9 +35,9 @@ const JoinClass = (props) => {
 
       const saveToUser = (courseCode) => {
         const database = getDatabase(app);
-        const userRef = ref(database, 'users/' + props.user.uid);
+        const userRef = ref(database, 'users/' + user.uid);
 
-        const tempCourses = props.user.courses || []; //if no courses, then empty array to avoid error
+        const tempCourses = user.courses || []; //if no courses, then empty array to avoid error
 
         var alreadyJoined = false;
         
@@ -55,6 +55,12 @@ const JoinClass = (props) => {
             }).catch((error) => {
                 console.error(error);
             });
+
+            var tempUser = {...user};
+
+            tempUser.courses = tempCourses;
+        
+            updateUser(tempUser);
 
             setCourseCreated(true);
 
@@ -94,7 +100,7 @@ const JoinClass = (props) => {
                             <input className="class-name" type="text" placeholder="8GH6F5" maxLength="6" {...register("courseCode", { required: true })} />
                         </div>
                         <div className={styles.center}>
-                            <button type="submit" className="button submit-form">Submit</button>
+                            <button type="submit" className={styles.button}>Submit</button>
                         </div>
                     </form>
                 </div>
