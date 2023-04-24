@@ -69,7 +69,7 @@ const LandingPage = () => {
         <footer className="bg-gray-800 text-white">
             <div className="max-w-6xl mx-auto px-4 py-8">
                 <div className="flex flex-col lg:flex-row items-center">
-                    <div className="flex-1">
+                    <div className="flex-1 pr-6">
             <h2 className="text-lg font-bold mb-2">About Us</h2>
             <p className="text-gray-500 dark:text-gray-400"><a href="https://github.com/SCCapstone/Harmony" className="pl-3 font-medium text-blue-600 underline dark:text-blue-500 hover:no-underline">Our GitHub</a></p>
                     </div>
