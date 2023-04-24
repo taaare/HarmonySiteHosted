@@ -61,7 +61,7 @@ const CreateClass = ({user, updateUser}) => {
 
       const handleClose = () => {
         setIsOpen(false);
-        navigate('/teachercourses');
+        navigate('/courses');
       };
 
     return (
@@ -83,10 +83,7 @@ const CreateClass = ({user, updateUser}) => {
                             <label htmlFor="instructorName" className={styles.inputheader}>Instructor</label><br />
                             <input className="instructor-name" type="text" placeholder="James H. Long" {...register("instructorName", { required: true })} />
                         </div>
-                        <div>
-                            <label htmlFor="scheduledDays" className={styles.inputheader}>Scheduled Days</label><br />
-                            <input className="scheduled-days" type="text" placeholder="T-TH" {...register("scheduledDays", { required: true })} />
-                        </div>
+
                         <div>
                             <label htmlFor="startDate" className={styles.inputheader}>Start Date</label><br />
                             <input className="start-date" type="date" {...register("startDate", { required: true })} />

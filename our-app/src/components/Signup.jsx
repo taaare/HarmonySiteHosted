@@ -16,7 +16,7 @@ const Signup = ({updateUserIsTeacher}) => {
         try {
             await createUser(email, password);
             updateUserIsTeacher(isTeacher);
-            navigate('/'); 
+            navigate('/signin'); 
         } catch (e) {
             setError('Email is already in use.');
         }

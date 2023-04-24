@@ -17,18 +17,17 @@ const CreateGrade = (props) => {
 
     var courseList = [];
     var courseIDs = [];
+    const [submissionStatus, setSubmissionStatus] = useState('');
 
-    //grabs values of courseNames from firebase
     function getCourseNames() {
         onValue(courses, (snapshot) => {
           const data = snapshot.val();
           for (let id in data) {
             courseList.push(data[id].courseName);
             courseIDs.push(id);
-            // console.log(id);
           }
         });
-      }
+    }
     
     getCourseNames();
 
@@ -40,7 +39,15 @@ const CreateGrade = (props) => {
         if (courseList[i] === courseName) {
           const database = getDatabase(app);
           const assignmentRef = ref(database, 'courses/' + courseIDs[i] + '/assignments/' + assignment);
-          set(assignmentRef, data);
+          set(assignmentRef, data)
+            .then(() => {
+              // Display "successful" message when the form is submitted successfully
+              setSubmissionStatus('Successful');
+            })
+            .catch(() => {
+              // Display "unsuccessful" message when there's an error during form submission
+              setSubmissionStatus('Unsuccessful');
+            });
         }
       }
     };
@@ -74,6 +81,7 @@ const CreateGrade = (props) => {
                             <button type="submit" className={styles.button}>Submit</button>
                         </div>
                     </form>
+                    <p className={styles.submissionStatus}>{submissionStatus}</p>
                 </div>
             </div>
         </div>

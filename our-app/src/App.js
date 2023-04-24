@@ -8,7 +8,7 @@ import ProtectedRoute from './components/ProtectedRoute.js';
 import CreateClass from './components/coursecreate.jsx';
 import JoinClass from './components/joinCourse.jsx';
 import EditClass from './components/editCourse.jsx';
-import TeacherCourses from './components/teachercourses.jsx';
+import Courses from './components/courses.jsx';
 import Sidebar from './components/sidebar.jsx'
 import CreateGrade from './components/gradebookCreate.jsx'
 import Discussions from './components/Discussions.jsx';
@@ -68,7 +68,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-      <Route path="/teachercourses" element={user !== '0' ? <TeacherCourses userEmail={userEmail} user={user} /> : <Navigate to='/account' />} />
+      <Route path="/courses" element={user !== '0' ? <Courses userEmail={userEmail} user={user} /> : <Navigate to='/account' />} />
       <Route path="/creategrade" element={userEmail !== '0' ? <CreateGrade /> : <Navigate to="/signin" />} />
       <Route path="/gradebook" element={userEmail !== '0' ? (user.isTeacher ? <GradeEditor userEmail={userEmail} user={user} /> : <Gradebook userEmail={userEmail} user={user} />) : <Navigate to='/signin' />} />
       <Route path="/createcourse" element={userEmail !== '0' ? <CreateClass user={user} updateUser={updateUser} /> : <Navigate to='/signin' />} />

@@ -18,8 +18,6 @@ const GradeEditor = (props) => {
   const [statusMessage, setStatusMessage] = useState(''); 
   const [userUid, setUserUid] = useState(''); 
 
-
-
   useEffect(() => {
     // Fetch classes and users from the database
     const database = getDatabase();
@@ -54,7 +52,6 @@ const GradeEditor = (props) => {
     }
   }, [selectedClass, selectedUser]);
   
-
   const handleClassChange = (e) => {
     setSelectedClass(e.target.value);
   };
@@ -67,16 +64,17 @@ const GradeEditor = (props) => {
       }
     });
   };
-  console.log(userUid);
+
   const handleSubmit = () => {
     const database = getDatabase();
     const updates = {};
-
+  
     assignments.forEach((assignment, index) => {
-      const grade = document.getElementsByClassName('grade2')[index].value;
+      const gradeInput = document.getElementsByClassName('grade2')[index];
+      const grade = gradeInput.value.trim() || gradeInput.placeholder;
       updates[`courses/${selectedClass}/assignments/${assignment.assignmentName}/grades/${userUid}`] = grade;
     });
-
+  
     update(ref(database), updates)
       .then(() => {
         console.log('Grades updated successfully');
@@ -97,7 +95,7 @@ const GradeEditor = (props) => {
             type="text"
             className="grade2"
             defaultValue={assignment.grade || ''}
-            placeholder={assignment?.grades?.[selectedUser.uid] ?? ''}
+            placeholder={assignment?.grades?.[userUid] ?? ''}
           />
           / {assignment.maxPoints}
         </div>

@@ -15,14 +15,13 @@ const Sidebar = (props) => {
                         {props.userEmail}
                     </p>
                     <div className={styles.sidebartextrectangle}>
-                    
-                    <Link to="/account" className={styles.sidebartext}>Home</Link>
+                        <Link to="/account" className={styles.sidebartext}>Home</Link>
                     </div>
                     <div className={styles.sidebartextrectangle}>
-                    <Link to="/teachercourses" className={styles.sidebartext}>Courses</Link>
+                        <Link to="/courses" className={styles.sidebartext}>Courses</Link>
                     </div>
                     <div className={styles.sidebartextrectangle}>
-                    <Link to="/gradebook" className={styles.sidebartext}>Grades</Link>
+                        <Link to="/gradebook" className={styles.sidebartext}>Grades</Link>
                     </div>
                 </div>
             </div>

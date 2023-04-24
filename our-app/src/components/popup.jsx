@@ -12,7 +12,7 @@ const Popup = (props) => {
   useEffect(() => {
 
     setIsOpen(props.isOpen);
-    console.log("yessir");
+
 
   }, [props.isOpen]);
 

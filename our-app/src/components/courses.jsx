@@ -5,7 +5,7 @@ import ClassBanner from './classbanner.jsx';
 import { getDatabase, ref, onValue, } from "firebase/database";
 import app from '../firebase.js';
 
-class TeacherCourses extends Component {
+class Courses extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -125,4 +125,4 @@ addClassBanner(){
   }
 }
 
-export default TeacherCourses;
+export default Courses;

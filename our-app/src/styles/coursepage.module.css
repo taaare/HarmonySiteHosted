@@ -15,9 +15,9 @@ body {
 
 
 .linkText { 
-    
     margin-left: 13%;
     color:white;
+    display: inline-block;
 }
 
 
@@ -34,10 +34,10 @@ body {
     .box { 
         display: inline-block;
         background-color: #192C3E;
-        width:40%;
-        height:28%;
+        width: 50%;
+        height: 35%;
         margin-top: 8%;
-        margin-left: 6.5%;
+        margin-left: 25%;
         border: 1px solid rgba(255, 255, 255, 1);
     }
 
@@ -52,3 +52,15 @@ body {
         height:22%;
         border: 1px solid rgba(255, 255, 255, 1);
     }
+
+    .assignmenttext {
+        margin-top: 4px;
+        color: white;
+        font-weight: bold;
+        font-size: 28px;
+    }
+
+    ul {
+        list-style-type: square;
+        padding-left: 35px;
+      }

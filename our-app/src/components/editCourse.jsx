@@ -39,7 +39,7 @@ const EditClass = (props, {updateUser}) => {
 
       const handleClose = () => {
         setIsOpen(false);
-        navigate('/teachercourses');
+        navigate('/courses');
       };
 
     return (
@@ -59,10 +59,7 @@ const EditClass = (props, {updateUser}) => {
                             <label htmlFor="instructorName" className={styles.inputheader}>Instructor</label><br />
                             <input className="instructor-name" type="text" defaultValue={course.instructorName} {...register("instructorName", { required: true })} />
                         </div>
-                        <div>
-                            <label htmlFor="scheduledDays" className={styles.inputheader}>Scheduled Days</label><br />
-                            <input className="scheduled-days" type="text" defaultValue={course.scheduledDays} {...register("scheduledDays", { required: true })} />
-                        </div>
+                        
                         <div>
                             <label htmlFor="startDate" className={styles.inputheader}>Start Date</label><br />
                             <input className="start-date" type="date" defaultValue={course.startDate} {...register("startDate", { required: true })} />
